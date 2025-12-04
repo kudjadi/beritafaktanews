@@ -1,0 +1,2 @@
+# beritafaktanews
+cms beritafaktanews static
