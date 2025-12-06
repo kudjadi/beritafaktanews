@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Program FizzBuzz Dinamis - Interaktif & User Friendly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Program FizzBuzz Dinamis. Masukkan angka, jalankan, dan tampilkan hasil Fizz, Buzz, atau FizzBuzz secara otomatis. Praktis, cepat, dan SEO-friendly.">
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-10">
+
+  <div class="max-w-xl mx-auto bg-white shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Program FizzBuzz Dinamis</h1>
+
+    <label class="font-semibold">Masukkan angka batas akhir:</label>
+    <input type="number" id="limit" placeholder="Contoh: 100" class="w-full border mt-2 p-2 outline-none focus:ring focus:ring-blue-400" />
+
+    <button id="run" class="w-full bg-blue-600 text-white py-2 mt-3 hover:bg-blue-700">Jalankan</button>
+
+    <div id="output" class="mt-6"></div>
+  </div>
+
+  <script>
+    document.getElementById('run').addEventListener('click', function() {
+      const limit = parseInt(document.getElementById('limit').value);
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+
+      if (!limit || limit <= 0) {
+        output.innerHTML = '<p class="text-red-600 font-semibold">Masukkan angka valid (lebih dari 0).</p>';
+        return;
+      }
+
+      // Generate data
+      let data = [];
+      for (let i = 1; i <= limit; i++) {
+        let text = '';
+        let cssClass = '';
+
+        if (i % 3 === 0 && i % 5 === 0) {
+          text = 'FizzBuzz';
+          cssClass = 'text-red-600 font-bold';
+        } else if (i % 3 === 0) {
+          text = 'Fizz';
+          cssClass = 'text-green-600 font-bold';
+        } else if (i % 5 === 0) {
+          text = 'Buzz';
+          cssClass = 'text-blue-600 font-bold';
+        } else {
+          text = i;
+        }
+
+        data.push({ num: i, text, cssClass });
+      }
+
+      let currentPage = 1;
+      const TABLES_PER_PAGE = 6;
+      const ROWS_PER_TABLE = 10;
+      const totalPages = Math.ceil(data.length / (TABLES_PER_PAGE * ROWS_PER_TABLE));
+
+      function renderTables() {
+        output.innerHTML = '';
+        const container = document.createElement('div');
+        container.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+
+        const startIndex = (currentPage - 1) * TABLES_PER_PAGE * ROWS_PER_TABLE;
+        const endIndex = startIndex + TABLES_PER_PAGE * ROWS_PER_TABLE;
+        const pageData = data.slice(startIndex, endIndex);
+
+        const chunkSize = ROWS_PER_TABLE;
+
+        for (let t = 0; t < TABLES_PER_PAGE; t++) {
+          const tableData = pageData.slice(t * chunkSize, (t + 1) * chunkSize);
+
+          const table = document.createElement('table');
+          table.className = 'w-full border border-gray-300 text-sm';
+
+          table.innerHTML = `
+            <thead>
+              <tr class='bg-gray-200 text-left'>
+                <th class='border px-2 py-1'>Angka</th>
+                <th class='border px-2 py-1'>Hasil</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableData.length === 0
+                ? "<tr><td colspan='2' class='p-2 text-center'>Tidak ada data</td></tr>"
+                : tableData.map(row => `
+                  <tr>
+                    <td class='border px-2 py-1'>${row.num}</td>
+                    <td class='border px-2 py-1 ${row.cssClass}'>${row.text}</td>
+                  </tr>
+                `).join('')
+              }
+            </tbody>
+          `;
+
+          container.appendChild(table);
+        }
+
+        output.appendChild(container);
+        renderPagination();
+      }
+
+      function renderPagination() {
+        const nav = document.createElement('div');
+        nav.className = 'flex justify-center items-center gap-2 mt-4';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = 'Prev';
+        prevBtn.className = 'px-3 py-1 bg-gray-300 hover:bg-gray-400';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => { currentPage--; renderTables(); };
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Next';
+        nextBtn.className = 'px-3 py-1 bg-gray-300 hover:bg-gray-400';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => { currentPage++; renderTables(); };
+
+        const info = document.createElement('span');
+        info.textContent = `Halaman ${currentPage} / ${totalPages}`;
+
+        nav.appendChild(prevBtn);
+        nav.appendChild(info);
+        nav.appendChild(nextBtn);
+
+        output.appendChild(nav);
+      }
+
+      renderTables();
+    });
+  </script>
+
+</body>
+</html>
