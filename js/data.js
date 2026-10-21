@@ -65,12 +65,12 @@ const DEFAULT_DATA = {
   },
   news: {
     subtitle: "Berita & Artikel",
-    title: "Kabar Terbaru dari Prime Agri",
+    title: "Kabar Terbaru dari KPKS Jadi Mandiri",
     desc: "Ikuti perkembangan, inovasi, dan kegiatan terbaru perusahaan.",
     items: [
       {
         id: "prime-agri-raih-sertifikasi-ispo-2026",
-        title: "Prime Agri Raih Sertifikasi ISPO 2026",
+        title: "KPKS Jadi Mandiri Raih Sertifikasi ISPO 2026",
         excerpt: "Perusahaan berhasil mempertahankan sertifikasi Indonesian Sustainable Palm Oil untuk seluruh unit perkebunan.",
         content: "<p>PT KPKS Jadi Mandiri Tbk. kembali meraih sertifikasi Indonesian Sustainable Palm Oil (ISPO) untuk tahun 2026. Sertifikasi ini mencakup seluruh unit perkebunan dan pabrik kelapa sawit perusahaan.</p><p>Direktur Utama menyampaikan bahwa pencapaian ini merupakan hasil kerja keras seluruh tim dalam menerapkan praktik perkebunan berkelanjutan sesuai standar nasional dan internasional.</p><p>Ke depan, perusahaan akan terus berkomitmen meningkatkan kualitas pengelolaan perkebunan dan kesejahteraan masyarakat sekitar.</p>",
         image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=1200&auto=format&fit=crop",
@@ -82,7 +82,7 @@ const DEFAULT_DATA = {
       {
         id: "program-pemberdayaan-petani-mitra-2026",
         title: "Program Pemberdayaan Petani Mitra Diperluas",
-        excerpt: "Prime Agri memperluas program kemitraan dengan petani swadaya di Sumatera dan Kalimantan.",
+        excerpt: "KPKS Jadi Mandiri memperluas program kemitraan dengan petani swadaya di Sumatera dan Kalimantan.",
         content: "<p>KPKS Jadi Mandiri memperluas program pemberdayaan petani mitra ke wilayah Sumatera dan Kalimantan. Program ini mencakup pelatihan budidaya, akses pupuk organik, dan pendampingan pascapanen.</p><p>Sejak dimulai, program telah melibatkan lebih dari 500 petani swadaya dengan peningkatan hasil panen rata-rata 20%.</p>",
         image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop",
         date: "2026-02-20",
@@ -94,7 +94,7 @@ const DEFAULT_DATA = {
         id: "inovasi-energi-biogas-pabrik",
         title: "Inovasi Energi Biogas di Pabrik Kelapa Sawit",
         excerpt: "Pemanfaatan limbah cair menjadi biogas mengurangi emisi karbon hingga 35%.",
-        content: "<p>Pabrik kelapa sawit Prime Agri mulai mengoperasikan instalasi biogas yang mengolah limbah cair (POME) menjadi energi listrik. Inisiatif ini mengurangi emisi karbon hingga 35% dan menyuplai kebutuhan listrik pabrik.</p><p>Teknologi ini sejalan dengan komitmen perusahaan terhadap transisi energi bersih dan ekonomi sirkular.</p>",
+        content: "<p>Pabrik kelapa sawit KPKS Jadi Mandiri mulai mengoperasikan instalasi biogas yang mengolah limbah cair (POME) menjadi energi listrik. Inisiatif ini mengurangi emisi karbon hingga 35% dan menyuplai kebutuhan listrik pabrik.</p><p>Teknologi ini sejalan dengan komitmen perusahaan terhadap transisi energi bersih dan ekonomi sirkular.</p>",
         image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop",
         date: "2026-01-10",
         author: "Divisi Teknik",
