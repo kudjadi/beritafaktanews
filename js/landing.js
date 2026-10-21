@@ -1,16 +1,20 @@
 /* =========================================================
    LANDING PAGE RENDERER
-   Membaca DataStore & render ke index.html
    ========================================================= */
 
 (function () {
   'use strict';
 
   function esc(s) {
-    return String(s ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escAttr(s) {
+    return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch { return iso; }
   }
 
   function render() {
@@ -33,8 +37,7 @@
     setText('hero-btn2', d.hero.btn2);
     const heroBg = document.getElementById('hero');
     if (heroBg && d.hero.image) {
-      heroBg.style.backgroundImage =
-        `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)), url('${d.hero.image}')`;
+      heroBg.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)), url('${d.hero.image}')`;
       heroBg.style.backgroundSize = 'cover';
       heroBg.style.backgroundPosition = 'center 30%';
     }
@@ -45,30 +48,6 @@
     setText('about-para1', d.about.para1);
     setText('about-para2', d.about.para2);
     setText('about-quote', d.about.quote);
-
-    /* ---------- FUNDAMENTALS ---------- */
-    setText('fund-subtitle', d.fundamentals.subtitle);
-    setText('fund-title', d.fundamentals.title);
-    setText('fund-para1', d.fundamentals.para1);
-    setText('fund-para2', d.fundamentals.para2);
-    const fundImg = document.getElementById('fund-image');
-    if (fundImg) {
-      if (d.fundamentals.image) {
-        fundImg.src = d.fundamentals.image;
-        fundImg.style.display = '';
-      } else {
-        fundImg.style.display = 'none';
-      }
-    }
-    const fundItems = document.getElementById('fund-items');
-    if (fundItems) {
-      fundItems.innerHTML = (d.fundamentals.items || []).map(item => `
-        <li class="flex items-start">
-          <span class="text-emerald-600 mr-2 font-bold">✓</span>
-          <span class="text-gray-700">${esc(item)}</span>
-        </li>
-      `).join('');
-    }
 
     /* ---------- SUSTAINABILITY ---------- */
     setText('sus-subtitle', d.sustainability.subtitle);
@@ -82,6 +61,23 @@
           <h3 class="text-xl font-bold text-gray-800 mb-2">${esc(p.name)}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">${esc(p.desc)}</p>
         </div>
+      `).join('');
+    }
+
+    /* ---------- FUNDAMENTALS ---------- */
+    setText('fund-subtitle', d.fundamentals.subtitle);
+    setText('fund-title', d.fundamentals.title);
+    setText('fund-para1', d.fundamentals.para1);
+    setText('fund-para2', d.fundamentals.para2);
+    const fundImg = document.getElementById('fund-image');
+    if (fundImg && d.fundamentals.image) fundImg.src = d.fundamentals.image;
+    const fundItems = document.getElementById('fund-items');
+    if (fundItems) {
+      fundItems.innerHTML = (d.fundamentals.items || []).map(item => `
+        <li class="flex items-start">
+          <span class="text-emerald-600 mr-2 font-bold">✓</span>
+          <span class="text-gray-700">${esc(item)}</span>
+        </li>
       `).join('');
     }
 
@@ -102,16 +98,82 @@
       `).join('');
     }
 
+    /* ---------- NEWS ---------- */
+    setText('news-subtitle', d.news?.subtitle);
+    setText('news-title', d.news?.title);
+    setText('news-desc', d.news?.desc);
+    const newsGrid = document.getElementById('news-grid');
+    if (newsGrid) {
+      const items = d.news?.items || [];
+      newsGrid.innerHTML = items.map(n => `
+        <article class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col">
+          <a href="article.html?id=${encodeURIComponent(n.id)}" class="block aspect-[16/10] overflow-hidden bg-gray-100">
+            <img src="${escAttr(n.image)}" alt="${escAttr(n.title)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </a>
+          <div class="p-5 flex flex-col flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">${esc(n.category)}</span>
+              <time datetime="${escAttr(n.date)}" class="text-xs text-gray-400">${formatDate(n.date)}</time>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-emerald-800 transition">
+              <a href="article.html?id=${encodeURIComponent(n.id)}">${esc(n.title)}</a>
+            </h3>
+            <p class="text-sm text-gray-600 line-clamp-3 flex-1">${esc(n.excerpt)}</p>
+            <a href="article.html?id=${encodeURIComponent(n.id)}" class="mt-3 inline-flex items-center text-sm font-semibold text-emerald-700 hover:text-emerald-800">
+              Baca selengkapnya
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    /* ---------- GALLERY ---------- */
+    setText('gallery-subtitle', d.gallery?.subtitle);
+    setText('gallery-title', d.gallery?.title);
+    setText('gallery-desc', d.gallery?.desc);
+    const galleryGrid = document.getElementById('gallery-grid');
+    if (galleryGrid) {
+      const items = d.gallery?.items || [];
+      window.__galleryItems = items;
+      galleryGrid.innerHTML = items.map((g, i) => `
+        <button onclick="openLightbox(${i})" class="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" aria-label="${escAttr(g.caption)}">
+          <img src="${escAttr(g.image)}" alt="${escAttr(g.caption)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+            <span class="text-white text-xs font-medium line-clamp-2 text-left">${esc(g.caption)}</span>
+          </div>
+        </button>
+      `).join('');
+    }
+
     /* ---------- FOOTER ---------- */
     const footDesc = document.getElementById('foot-desc');
     if (footDesc) footDesc.innerHTML = `${esc(d.footer.companyName)}<br>${esc(d.footer.tagline)}`;
     setText('foot-address', d.footer.address);
     const footEmail = document.getElementById('foot-email');
-    if (footEmail) {
-      footEmail.innerHTML = `<a href="mailto:${esc(d.footer.email)}" class="hover:text-emerald-400 transition">${esc(d.footer.email)}</a>`;
-    }
+    if (footEmail) footEmail.innerHTML = `<a href="mailto:${escAttr(d.footer.email)}" class="hover:text-emerald-400 transition">${esc(d.footer.email)}</a>`;
     setText('foot-phone', d.footer.phone);
     setText('foot-copy', d.footer.copyright);
+
+    /* ---------- DYNAMIC SEO ---------- */
+    const ogTitle = document.getElementById('og-title');
+    if (ogTitle) ogTitle.setAttribute('content', d.site.title + ' — ' + d.hero.title);
+    const ogDesc = document.getElementById('og-desc');
+    if (ogDesc) ogDesc.setAttribute('content', d.site.metaDescription);
+    const ogImg = document.getElementById('og-image');
+    if (ogImg) ogImg.setAttribute('content', d.hero.image);
+    const ldOrg = document.getElementById('json-ld-org');
+    if (ldOrg) {
+      ldOrg.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": d.footer.companyName,
+        "url": location.origin + location.pathname,
+        "email": d.footer.email,
+        "telephone": d.footer.phone,
+        "address": { "@type": "PostalAddress", "addressLocality": d.footer.address }
+      });
+    }
   }
 
   function setText(id, value) {
@@ -119,14 +181,55 @@
     if (el) el.textContent = value ?? '';
   }
 
-  /* Initial render */
+  /* ---------- LIGHTBOX ---------- */
+  let lbIndex = 0;
+  window.openLightbox = function (i) {
+    lbIndex = i;
+    updateLightbox();
+    const lb = document.getElementById('lightbox');
+    if (lb) { lb.classList.remove('hidden'); lb.classList.add('flex'); }
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeLightbox = function () {
+    const lb = document.getElementById('lightbox');
+    if (lb) { lb.classList.add('hidden'); lb.classList.remove('flex'); }
+    document.body.style.overflow = '';
+  };
+  window.prevLightbox = function () {
+    const items = window.__galleryItems || [];
+    if (!items.length) return;
+    lbIndex = (lbIndex - 1 + items.length) % items.length;
+    updateLightbox();
+  };
+  window.nextLightbox = function () {
+    const items = window.__galleryItems || [];
+    if (!items.length) return;
+    lbIndex = (lbIndex + 1) % items.length;
+    updateLightbox();
+  };
+  function updateLightbox() {
+    const items = window.__galleryItems || [];
+    const item = items[lbIndex];
+    if (!item) return;
+    const img = document.getElementById('lightbox-img');
+    const cap = document.getElementById('lightbox-caption');
+    if (img) { img.src = item.image; img.alt = item.caption; }
+    if (cap) cap.textContent = item.caption;
+  }
+  document.addEventListener('keydown', (e) => {
+    const lb = document.getElementById('lightbox');
+    if (!lb || lb.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') prevLightbox();
+    if (e.key === 'ArrowRight') nextLightbox();
+  });
+
+  /* ---------- INIT ---------- */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render);
   } else {
     render();
   }
-
-  /* Re-render saat admin menyimpan */
   window.addEventListener('data-updated', render);
   window.addEventListener('storage', (e) => {
     if (e.key === STORAGE_KEY) render();

@@ -1,6 +1,5 @@
 /* =========================================================
    DATA STORE — Prime Agri Resources
-   Simpan di localStorage, fallback ke DEFAULT_DATA
    ========================================================= */
 
 const DEFAULT_DATA = {
@@ -58,6 +57,59 @@ const DEFAULT_DATA = {
       { icon: "🌰", name: "Palm Kernel (PK)", desc: "Inti sawit yang diolah menjadi produk bernilai tambah, termasuk minyak inti sawit dan bungkil sebagai pakan ternak." }
     ]
   },
+  news: {
+    subtitle: "Berita & Artikel",
+    title: "Kabar Terbaru dari Prime Agri",
+    desc: "Ikuti perkembangan, inovasi, dan kegiatan terbaru perusahaan.",
+    items: [
+      {
+        id: "prime-agri-raih-sertifikasi-ispo-2026",
+        title: "Prime Agri Raih Sertifikasi ISPO 2026",
+        excerpt: "Perusahaan berhasil mempertahankan sertifikasi Indonesian Sustainable Palm Oil untuk seluruh unit perkebunan.",
+        content: "<p>PT Prime Agri Resources Tbk. kembali meraih sertifikasi Indonesian Sustainable Palm Oil (ISPO) untuk tahun 2026. Sertifikasi ini mencakup seluruh unit perkebunan dan pabrik kelapa sawit perusahaan.</p><p>Direktur Utama menyampaikan bahwa pencapaian ini merupakan hasil kerja keras seluruh tim dalam menerapkan praktik perkebunan berkelanjutan sesuai standar nasional dan internasional.</p><p>Ke depan, perusahaan akan terus berkomitmen meningkatkan kualitas pengelolaan perkebunan dan kesejahteraan masyarakat sekitar.</p>",
+        image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=1200&auto=format&fit=crop",
+        date: "2026-03-15",
+        author: "Tim Komunikasi",
+        category: "Sertifikasi",
+        featured: true
+      },
+      {
+        id: "program-pemberdayaan-petani-mitra-2026",
+        title: "Program Pemberdayaan Petani Mitra Diperluas",
+        excerpt: "Prime Agri memperluas program kemitraan dengan petani swadaya di Sumatera dan Kalimantan.",
+        content: "<p>Prime Agri Resources memperluas program pemberdayaan petani mitra ke wilayah Sumatera dan Kalimantan. Program ini mencakup pelatihan budidaya, akses pupuk organik, dan pendampingan pascapanen.</p><p>Sejak dimulai, program telah melibatkan lebih dari 500 petani swadaya dengan peningkatan hasil panen rata-rata 20%.</p>",
+        image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop",
+        date: "2026-02-20",
+        author: "Divisi CSR",
+        category: "Pemberdayaan",
+        featured: false
+      },
+      {
+        id: "inovasi-energi-biogas-pabrik",
+        title: "Inovasi Energi Biogas di Pabrik Kelapa Sawit",
+        excerpt: "Pemanfaatan limbah cair menjadi biogas mengurangi emisi karbon hingga 35%.",
+        content: "<p>Pabrik kelapa sawit Prime Agri mulai mengoperasikan instalasi biogas yang mengolah limbah cair (POME) menjadi energi listrik. Inisiatif ini mengurangi emisi karbon hingga 35% dan menyuplai kebutuhan listrik pabrik.</p><p>Teknologi ini sejalan dengan komitmen perusahaan terhadap transisi energi bersih dan ekonomi sirkular.</p>",
+        image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop",
+        date: "2026-01-10",
+        author: "Divisi Teknik",
+        category: "Inovasi",
+        featured: false
+      }
+    ]
+  },
+  gallery: {
+    subtitle: "Galeri Kegiatan",
+    title: "Momen & Aktivitas Kami",
+    desc: "Dokumentasi kegiatan perkebunan, pelatihan, dan komunitas.",
+    items: [
+      { id: "g1", image: "https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=800&auto=format&fit=crop", caption: "Panen kelapa sawit berkelanjutan" },
+      { id: "g2", image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop", caption: "Pelatihan petani mitra" },
+      { id: "g3", image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=800&auto=format&fit=crop", caption: "Instalasi biogas pabrik" },
+      { id: "g4", image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800&auto=format&fit=crop", caption: "Audit sertifikasi ISPO" },
+      { id: "g5", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=800&auto=format&fit=crop", caption: "Pembibitan bibit unggul" },
+      { id: "g6", image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=800&auto=format&fit=crop", caption: "Kegiatan komunitas lokal" }
+    ]
+  },
   footer: {
     companyName: "PT Prime Agri Resources Tbk",
     tagline: "Agribisnis terintegrasi yang berkelanjutan.",
@@ -70,9 +122,7 @@ const DEFAULT_DATA = {
 
 const STORAGE_KEY = 'prime_agri_data_v1';
 
-function deepClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
+function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
 function deepMerge(target, source) {
   for (const key in source) {
@@ -92,6 +142,8 @@ function validateAndFix(data) {
   if (!Array.isArray(merged.sustainability?.pillars)) merged.sustainability.pillars = [];
   if (!Array.isArray(merged.products?.items)) merged.products.items = [];
   if (!Array.isArray(merged.fundamentals?.items)) merged.fundamentals.items = [];
+  if (!Array.isArray(merged.news?.items)) merged.news.items = [];
+  if (!Array.isArray(merged.gallery?.items)) merged.gallery.items = [];
   return merged;
 }
 
@@ -129,9 +181,7 @@ const DataStore = {
       return { ok: false, error: e.message };
     }
   },
-  exportJSON() {
-    return JSON.stringify(this.get(), null, 2);
-  },
+  exportJSON() { return JSON.stringify(this.get(), null, 2); },
   importJSON(jsonStr) {
     try {
       const parsed = JSON.parse(jsonStr);

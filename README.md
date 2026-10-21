@@ -1,43 +1,46 @@
 # Prime Agri Resources — Landing Page + CMS
 
-Landing page statis dengan CMS admin berbasis browser (localStorage). Siap deploy ke GitHub Pages.
+Landing page statis dengan CMS admin (localStorage) + News/Artikel + Galeri Foto. Siap deploy ke GitHub Pages.
 
 ## 📁 Struktur
 
-- `index.html` — landing page (render dinamis dari data)
+- `index.html` — landing page
 - `admin.html` — CMS admin
+- `article.html` — halaman detail artikel
 - `js/data.js` — data store & default content
-- `js/landing.js` — render landing page
+- `js/landing.js` — render landing
+- `js/article.js` — render detail artikel
 - `js/admin.js` — logika CMS
+- `sitemap.xml`, `robots.txt` — SEO
 
-## 🚀 Deploy ke GitHub Pages
+## 🚀 Deploy
 
-1. Push semua file ke repo GitHub (branch `main`).
-2. Buka **Settings → Pages**.
-3. Source: **Deploy from a branch** → Branch `main` → Folder `/ (root)`.
-4. Save, tunggu 1–2 menit.
-5. Akses:
-   - Landing: `https://<username>.github.io/<repo>/`
-   - Admin:   `https://<username>.github.io/<repo>/admin.html`
+1. Push semua file ke GitHub (branch `main`).
+2. **Settings → Pages** → Source: `Deploy from a branch` → `main` / `/ (root)` → Save.
+3. Akses:
+   - Landing: `https://<user>.github.io/<repo>/`
+   - Admin:   `https://<user>.github.io/<repo>/admin.html`
+   - Artikel: `https://<user>.github.io/<repo>/article.html?id=...`
 
-## ⚠️ Catatan Penting
+## ⚠️ Catatan
 
-- CMS menyimpan data di **localStorage browser**.
-- Perubahan **hanya terlihat di browser Anda sendiri**.
-- Untuk mengubah konten default untuk semua pengunjung: edit `DEFAULT_DATA` di `js/data.js` → commit → push.
-- Gunakan menu **Import / Export** untuk backup atau pindah konten.
-- Untuk CMS multi-user real-time, butuh backend (Supabase, Firebase, dll).
+- CMS simpan di **localStorage** — perubahan hanya terlihat di browser Anda.
+- Untuk konten default publik: edit `DEFAULT_DATA` di `js/data.js` → commit.
+- Gunakan **Import/Export** untuk backup.
 
-## 🔧 Cara Pakai CMS
+## 🎯 Fitur SEO
 
-1. Buka `admin.html`.
-2. Edit konten di tab yang diinginkan.
-3. Klik **Simpan Semua** di kanan atas.
-4. Buka `index.html` (refresh) untuk melihat hasil.
-5. Gunakan **Import/Export** untuk backup konten.
+- Meta tags dinamis (OG, Twitter, canonical)
+- JSON-LD: `Organization`, `NewsArticle`, `BreadcrumbList`
+- `sitemap.xml` & `robots.txt`
+- Lazy loading gambar + alt text
+- Semantic HTML (`<article>`, `<time>`, `<figure>`)
+- Mobile-first responsive
+- Accessible lightbox (ESC, ←/→)
 
-## ✅ Perbaikan Bug Simpan
+## 🎨 Fitur
 
-- `saveAll` mengumpulkan semua field, sinkronkan pillars/products dari DOM, verifikasi tulis ke `localStorage`, lalu re-render form.
-- Error ditampilkan di toast merah; sukses di toast hijau.
-- Status "Tersimpan [waktu]" muncul di header.
+- Hero, About, Sustainability, Fundamentals, Products
+- News/Artikel dengan halaman detail
+- Galeri foto dengan lightbox
+- CRUD penuh via CMS

@@ -9,15 +9,17 @@
 
   /* ---------- TAB SWITCH ---------- */
   const pageTitles = {
-    dashboard:   { title: 'Dashboard',            subtitle: 'Ringkasan dan pengaturan konten landing page' },
-    hero:        { title: 'Hero Section',         subtitle: 'Atur konten bagian hero di landing page' },
-    about:       { title: 'About / Company Profile', subtitle: 'Atur profil perusahaan dan kutipan' },
-    fundamentals:{ title: 'Fundamental Bisnis',   subtitle: 'Atur bagian building the fundamentals' },
-    sustainability:{ title: 'Keberlanjutan',      subtitle: 'Atur empat pilar keberlanjutan' },
-    products:    { title: 'Produk',               subtitle: 'Kelola produk yang ditampilkan' },
-    footer:      { title: 'Footer & Kontak',      subtitle: 'Atur informasi kontak dan footer' },
-    settings:    { title: 'Pengaturan Situs',     subtitle: 'Konfigurasi umum situs' },
-    backup:      { title: 'Import / Export',      subtitle: 'Backup dan restore data konten' }
+    dashboard:    { title: 'Dashboard',            subtitle: 'Ringkasan dan pengaturan konten landing page' },
+    hero:         { title: 'Hero Section',         subtitle: 'Atur konten bagian hero di landing page' },
+    about:        { title: 'About / Company Profile', subtitle: 'Atur profil perusahaan dan kutipan' },
+    fundamentals: { title: 'Fundamental Bisnis',   subtitle: 'Atur bagian building the fundamentals' },
+    sustainability:{ title: 'Keberlanjutan',       subtitle: 'Atur empat pilar keberlanjutan' },
+    products:     { title: 'Produk',               subtitle: 'Kelola produk yang ditampilkan' },
+    news:         { title: 'Berita / Artikel',     subtitle: 'Kelola artikel dan berita perusahaan' },
+    gallery:      { title: 'Galeri Foto',          subtitle: 'Kelola foto kegiatan' },
+    footer:       { title: 'Footer & Kontak',      subtitle: 'Atur informasi kontak dan footer' },
+    settings:     { title: 'Pengaturan Situs',     subtitle: 'Konfigurasi umum situs' },
+    backup:       { title: 'Import / Export',      subtitle: 'Backup dan restore data konten' }
   };
 
   window.switchTab = function (tabName, element) {
@@ -50,7 +52,7 @@
   }
   window.showToast = showToast;
 
-  /* ---------- PATH HELPERS ---------- */
+  /* ---------- HELPERS ---------- */
   function getByPath(obj, path) {
     return path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
   }
@@ -63,8 +65,14 @@
     }, obj);
     target[last] = value;
   }
+  function escHtml(s) {
+    return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escAttr(s) {
+    return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
 
-  /* ---------- FILL FORM FROM currentData ---------- */
+  /* ---------- FILL FORM ---------- */
   function fillForm() {
     document.querySelectorAll('.field').forEach(el => {
       const path = el.dataset.field;
@@ -78,25 +86,25 @@
     });
     renderPillars();
     renderProducts();
+    renderNews();
+    renderGallery();
     updateStats();
   }
 
   function updateStats() {
-    const prodEl = document.getElementById('stat-products');
-    const pilEl = document.getElementById('stat-pillars');
-    if (prodEl) prodEl.textContent = (currentData.products?.items || []).length;
-    if (pilEl) pilEl.textContent = (currentData.sustainability?.pillars || []).length;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('stat-products', (currentData.products?.items || []).length);
+    set('stat-pillars', (currentData.sustainability?.pillars || []).length);
+    set('stat-news', (currentData.news?.items || []).length);
+    set('stat-gallery', (currentData.gallery?.items || []).length);
   }
 
-  /* ---------- COLLECT FIELDS ---------- */
   function collectFields() {
     document.querySelectorAll('.field').forEach(el => {
       const path = el.dataset.field;
       const type = el.dataset.type;
       let val = el.value;
-      if (type === 'array') {
-        val = val.split('\n').map(s => s.trim()).filter(Boolean);
-      }
+      if (type === 'array') val = val.split('\n').map(s => s.trim()).filter(Boolean);
       setByPath(currentData, path, val);
     });
   }
@@ -119,29 +127,22 @@
         <textarea data-pillar="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="pillar-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(p.desc)}</textarea>
       </div>
     `).join('');
-
     wrap.querySelectorAll('.pillar-field').forEach(el => {
       el.addEventListener('input', () => {
         const i = +el.dataset.pillar;
         const key = el.dataset.key;
-        if (currentData.sustainability.pillars[i]) {
-          currentData.sustainability.pillars[i][key] = el.value;
-        }
+        if (currentData.sustainability.pillars[i]) currentData.sustainability.pillars[i][key] = el.value;
       });
     });
   }
-
   window.removePillar = function (i) {
     if (!confirm('Hapus pilar ini?')) return;
     currentData.sustainability.pillars.splice(i, 1);
-    renderPillars();
-    updateStats();
+    renderPillars(); updateStats();
   };
-
   window.addPillar = function () {
     currentData.sustainability.pillars.push({ icon: '⭐', name: 'Pilar Baru', desc: 'Deskripsi pilar...' });
-    renderPillars();
-    updateStats();
+    renderPillars(); updateStats();
   };
 
   /* ---------- PRODUCTS ---------- */
@@ -162,32 +163,115 @@
         <textarea data-product="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="product-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(p.desc)}</textarea>
       </div>
     `).join('');
-
     wrap.querySelectorAll('.product-field').forEach(el => {
       el.addEventListener('input', () => {
         const i = +el.dataset.product;
         const key = el.dataset.key;
-        if (currentData.products.items[i]) {
-          currentData.products.items[i][key] = el.value;
-        }
+        if (currentData.products.items[i]) currentData.products.items[i][key] = el.value;
       });
     });
   }
-
   window.removeProduct = function (i) {
     if (!confirm('Hapus produk ini?')) return;
     currentData.products.items.splice(i, 1);
-    renderProducts();
-    updateStats();
+    renderProducts(); updateStats();
   };
-
   window.addProduct = function () {
     currentData.products.items.push({ icon: '📦', name: 'Produk Baru', desc: 'Deskripsi produk...' });
-    renderProducts();
-    updateStats();
+    renderProducts(); updateStats();
   };
 
-  /* ---------- SAVE ALL (FIXED) ---------- */
+  /* ---------- NEWS ---------- */
+  function renderNews() {
+    const wrap = document.getElementById('news-editor');
+    if (!wrap) return;
+    if (!currentData.news) currentData.news = { subtitle: '', title: '', desc: '', items: [] };
+    const items = currentData.news.items || [];
+    wrap.innerHTML = items.map((n, i) => `
+      <details class="border border-gray-200 rounded-lg" ${i === 0 ? 'open' : ''}>
+        <summary class="cursor-pointer px-4 py-3 flex items-center justify-between hover:bg-gray-50">
+          <span class="text-sm font-medium text-gray-800 truncate">📰 ${escHtml(n.title || 'Artikel Baru')}</span>
+          <button type="button" onclick="event.preventDefault(); removeNews(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+        </summary>
+        <div class="p-4 space-y-2 border-t border-gray-200">
+          <input data-news="${i}" data-key="id" value="${escAttr(n.id)}" placeholder="ID unik (slug)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          <input data-news="${i}" data-key="title" value="${escAttr(n.title)}" placeholder="Judul" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          <div class="grid grid-cols-2 gap-2">
+            <input data-news="${i}" data-key="category" value="${escAttr(n.category)}" placeholder="Kategori" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+            <input data-news="${i}" data-key="date" type="date" value="${escAttr(n.date)}" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          </div>
+          <input data-news="${i}" data-key="author" value="${escAttr(n.author)}" placeholder="Penulis" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          <input data-news="${i}" data-key="image" value="${escAttr(n.image)}" placeholder="URL Gambar" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          <textarea data-news="${i}" data-key="excerpt" rows="2" placeholder="Ringkasan" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(n.excerpt)}</textarea>
+          <textarea data-news="${i}" data-key="content" rows="4" placeholder="Konten lengkap (HTML diperbolehkan)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm font-mono">${escHtml(n.content)}</textarea>
+        </div>
+      </details>
+    `).join('');
+    wrap.querySelectorAll('.news-field').forEach(el => {
+      el.addEventListener('input', () => {
+        const i = +el.dataset.news;
+        const key = el.dataset.key;
+        if (currentData.news.items[i]) currentData.news.items[i][key] = el.value;
+      });
+    });
+  }
+  window.removeNews = function (i) {
+    if (!confirm('Hapus artikel ini?')) return;
+    currentData.news.items.splice(i, 1);
+    renderNews(); updateStats();
+  };
+  window.addNews = function () {
+    const id = 'artikel-' + Date.now();
+    currentData.news.items.unshift({
+      id, title: 'Artikel Baru', excerpt: 'Ringkasan...', content: '<p>Isi artikel...</p>',
+      image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop',
+      date: new Date().toISOString().slice(0, 10), author: 'Admin', category: 'Umum', featured: false
+    });
+    renderNews(); updateStats();
+  };
+
+  /* ---------- GALLERY ---------- */
+  function renderGallery() {
+    const wrap = document.getElementById('gallery-editor');
+    if (!wrap) return;
+    if (!currentData.gallery) currentData.gallery = { subtitle: '', title: '', desc: '', items: [] };
+    const items = currentData.gallery.items || [];
+    wrap.innerHTML = items.map((g, i) => `
+      <div class="border border-gray-200 rounded-lg p-3" data-gallery-index="${i}">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-gray-500">Foto #${i + 1}</span>
+          <button type="button" onclick="removeGallery(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+        </div>
+        <div class="aspect-video rounded bg-gray-100 mb-2 overflow-hidden">
+          <img src="${escAttr(g.image)}" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'">
+        </div>
+        <input data-gallery="${i}" data-key="image" value="${escAttr(g.image)}" placeholder="URL Gambar" class="gallery-field w-full border border-gray-300 rounded px-2 py-1 text-sm mb-2">
+        <input data-gallery="${i}" data-key="caption" value="${escAttr(g.caption)}" placeholder="Caption" class="gallery-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+      </div>
+    `).join('');
+    wrap.querySelectorAll('.gallery-field').forEach(el => {
+      el.addEventListener('input', () => {
+        const i = +el.dataset.gallery;
+        const key = el.dataset.key;
+        if (currentData.gallery.items[i]) currentData.gallery.items[i][key] = el.value;
+      });
+    });
+  }
+  window.removeGallery = function (i) {
+    if (!confirm('Hapus foto ini?')) return;
+    currentData.gallery.items.splice(i, 1);
+    renderGallery(); updateStats();
+  };
+  window.addGallery = function () {
+    currentData.gallery.items.push({
+      id: 'g' + Date.now(),
+      image: 'https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=800&auto=format&fit=crop',
+      caption: 'Foto baru'
+    });
+    renderGallery(); updateStats();
+  };
+
+  /* ---------- SAVE ALL ---------- */
   window.saveAll = function () {
     try {
       collectFields();
@@ -220,12 +304,36 @@
         currentData.products.items = fresh.filter(Boolean);
       }
 
+      const newsEls = document.querySelectorAll('#news-editor details');
+      if (newsEls.length > 0) {
+        const fresh = [];
+        newsEls.forEach(detail => {
+          const obj = {};
+          detail.querySelectorAll('.news-field').forEach(f => { obj[f.dataset.key] = f.value; });
+          if (obj.id || obj.title) fresh.push(obj);
+        });
+        currentData.news.items = fresh;
+      }
+
+      const galEls = document.querySelectorAll('#gallery-editor [data-gallery-index]');
+      if (galEls.length > 0) {
+        const fresh = [];
+        galEls.forEach(box => {
+          const obj = {};
+          box.querySelectorAll('.gallery-field').forEach(f => { obj[f.dataset.key] = f.value; });
+          if (obj.image) {
+            obj.id = obj.id || 'g' + Date.now() + Math.random().toString(36).slice(2, 6);
+            fresh.push(obj);
+          }
+        });
+        currentData.gallery.items = fresh;
+      }
+
       const result = DataStore.save(currentData);
       if (!result.ok) {
         showToast('Gagal menyimpan: ' + result.error, 'error');
         return;
       }
-
       currentData = result.data;
       fillForm();
 
@@ -234,7 +342,6 @@
         statusEl.textContent = '✓ Tersimpan ' + new Date().toLocaleTimeString('id-ID');
         statusEl.className = 'text-xs text-emerald-600 mr-2 font-medium';
       }
-
       showToast('✓ Perubahan berhasil disimpan!', 'success');
     } catch (err) {
       console.error('saveAll error:', err);
@@ -265,19 +372,13 @@
   window.importData = function () {
     const input = document.getElementById('import-file');
     const file = input?.files?.[0];
-    if (!file) {
-      showToast('Pilih file JSON terlebih dahulu', 'error');
-      return;
-    }
+    if (!file) { showToast('Pilih file JSON terlebih dahulu', 'error'); return; }
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const parsed = JSON.parse(e.target.result);
         const result = DataStore.save(parsed);
-        if (!result.ok) {
-          showToast('Import gagal: ' + result.error, 'error');
-          return;
-        }
+        if (!result.ok) { showToast('Import gagal: ' + result.error, 'error'); return; }
         currentData = DataStore.get();
         fillForm();
         input.value = '';
@@ -293,22 +394,11 @@
   window.resetData = function () {
     if (!confirm('Reset semua konten ke default? Tindakan ini tidak bisa dibatalkan.')) return;
     const result = DataStore.reset();
-    if (!result.ok) {
-      showToast('Reset gagal: ' + result.error, 'error');
-      return;
-    }
+    if (!result.ok) { showToast('Reset gagal: ' + result.error, 'error'); return; }
     currentData = DataStore.get();
     fillForm();
     showToast('✓ Data direset ke default', 'success');
   };
-
-  /* ---------- HELPERS ---------- */
-  function escHtml(s) {
-    return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-  function escAttr(s) {
-    return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-  }
 
   /* ---------- INIT ---------- */
   function init() {
@@ -316,7 +406,6 @@
     fillForm();
     console.log('[CMS] Ready. Data:', currentData);
   }
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
