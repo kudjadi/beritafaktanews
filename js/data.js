@@ -3,126 +3,191 @@
    ========================================================= */
 
 const DEFAULT_DATA = {
-  site: {
-    title: "KPKS Jadi Mandiri",
-    metaDescription: "PT KPKS Jadi Mandiri Tbk. - Agribisnis terintegrasi yang berkelanjutan.",
-    favicon: "P",
-    themeColor: "#194637"
+  "site": {
+    "title": "KPKS Jadi Mandiri",
+    "metaDescription": "KPKS Jadi Mandiri. - Agribisnis Terintegrasi yang Berkelanjutan.",
+    "favicon": "JM",
+    "themeColor": "#194637"
   },
-  github: {
-    owner: "kudjadi",
-    repo: "beritafaktanews",
-    branch: "main",
-    uploadPath: "uploads"
+  "github": {
+    "owner": "kudjadi",
+    "repo": "beritafaktanews",
+    "branch": "main",
+    "uploadPath": "uploads"
   },
-  hero: {
-    label: "PT KPKS Jadi Mandiri Tbk",
-    title: "Membangun Fundamental Bisnis yang Berkelanjutan",
-    desc: "Mengelola sumber daya alam terbarukan dengan tata kelola terbaik, sumber daya manusia yang berkomitmen pada keunggulan, serta kepatuhan terhadap standar nasional dan internasional.",
-    btn1: "Pelajari Lebih Lanjut",
-    btn2: "Laporan Tahunan",
-    image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop"
+  "hero": {
+    "label": "KPKS Jadi Mandiri",
+    "title": "Membangun Fundamental Bisnis yang Berkelanjutan",
+    "desc": "Mengelola sumber daya alam terbarukan dengan tata kelola terbaik, sumber daya manusia yang berkomitmen pada keunggulan, serta kepatuhan terhadap standar nasional dan internasional.",
+    "btn1": "Pelajari Lebih Lanjut",
+    "btn2": "",
+    "image": "https://cms.sampoernaagro.com/storage/files/shares/Untitled-1.jpg"
   },
-  about: {
-    subtitle: "Company Profile",
-    title: "Tentang KPKS Jadi Mandiri",
-    para1: "PT KPKS Jadi Mandiri (sebelumnya PT Sampoerna Agro Tbk.) terdaftar di Bursa Efek Indonesia. Kami adalah perusahaan agribisnis terintegrasi yang berfokus pada pengelolaan sumber daya alam secara bertanggung jawab dan berkelanjutan.",
-    para2: "Dengan pengalaman sejak penanaman pertama pada tahun 1989, aset perkebunan kami memiliki nilai keberlanjutan yang tinggi, berkembang menjadi usaha agribisnis terintegrasi dan terdiversifikasi dalam empat komoditas utama: minyak kelapa sawit, inti sawit, dan benih.",
-    quote: "Fokus pada upaya memperkuat fundamental bisnis melalui praktik pertanian yang baik dan bertanggung jawab, mulai dari perlindungan kawasan bernilai konservasi tinggi, penggunaan pupuk organik, pengendalian hama biologis, hingga daur ulang limbah menjadi energi."
+  "about": {
+    "subtitle": "Company Profile",
+    "title": "Tentang KPKS Jadi Mandiri",
+    "para1": "KPKS Jadi Mandiri (sebelumnya PT Sampoerna Agro Tbk.) terdaftar di Bursa Efek Indonesia. Kami adalah perusahaan agribisnis terintegrasi yang berfokus pada pengelolaan sumber daya alam secara bertanggung jawab dan berkelanjutan.",
+    "para2": "Dengan pengalaman sejak penanaman pertama pada tahun 1989, aset perkebunan kami memiliki nilai keberlanjutan yang tinggi, berkembang menjadi usaha agribisnis terintegrasi dan terdiversifikasi dalam empat komoditas utama: minyak kelapa sawit, inti sawit, dan benih.",
+    "quote": "Fokus pada upaya memperkuat fundamental bisnis melalui praktik pertanian yang baik dan bertanggung jawab, mulai dari perlindungan kawasan bernilai konservasi tinggi, penggunaan pupuk organik, pengendalian hama biologis, hingga daur ulang limbah menjadi energi."
   },
-  fundamentals: {
-    subtitle: "Fundamental Bisnis",
-    title: "Building the Fundamentals",
-    para1: "KPKS Jadi Mandiri terus fokus pada upaya memperkuat fundamental bisnis. Kini, perusahaan terdiri dari sumber daya alam terbarukan yang dikelola dengan baik, sumber daya manusia yang berkomitmen pada keunggulan, dan kepatuhan terhadap hukum yang berlaku serta persyaratan standar nasional dan internasional.",
-    para2: "Praktik pertanian yang baik dan bertanggung jawab menciptakan keberlanjutan: mulai dari kawasan bernilai konservasi tinggi yang dilindungi, penggunaan pupuk organik, agen pengendalian hama biologis, penggunaan air secara bijak, daur ulang limbah perkebunan menjadi sumber energi, hingga sifat alami tanaman itu sendiri yang dapat ditanam ulang.",
-    image: "https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=1974&auto=format&fit=crop",
-    items: [
+  "fundamentals": {
+    "subtitle": "Fundamental Bisnis",
+    "title": "Building the Fundamentals",
+    "para1": "KPKS Jadi Mandiri terus fokus pada upaya memperkuat fundamental bisnis. Kini, perusahaan terdiri dari sumber daya alam terbarukan yang dikelola dengan baik, sumber daya manusia yang berkomitmen pada keunggulan, dan kepatuhan terhadap hukum yang berlaku serta persyaratan standar nasional dan internasional.",
+    "para2": "Praktik pertanian yang baik dan bertanggung jawab menciptakan keberlanjutan: mulai dari kawasan bernilai konservasi tinggi yang dilindungi, penggunaan pupuk organik, agen pengendalian hama biologis, penggunaan air secara bijak, daur ulang limbah perkebunan menjadi sumber energi, hingga sifat alami tanaman itu sendiri yang dapat ditanam ulang.",
+    "image": "https://cms.sampoernaagro.com/storage/files/shares/Untitled-1.jpg",
+    "items": [
       "Kawasan konservasi tinggi yang dilindungi",
       "Pupuk organik dan pengendalian hama biologis",
       "Daur ulang limbah menjadi energi terbarukan",
       "Tanaman dapat ditanam ulang secara berkelanjutan"
     ]
   },
-  sustainability: {
-    subtitle: "Keberlanjutan",
-    title: "Pemberdayaan Masyarakat Lokal dan Pengelolaan Tenaga Kerja",
-    desc: "Empat pilar utama yang menjadi landasan keberlanjutan kami: People, Planet, Product, Profit.",
-    pillars: [
-      { icon: "👥", name: "People", desc: "Sumber daya manusia, baik internal maupun eksternal. Kesejahteraan karyawan adalah cerminan keberhasilan perusahaan." },
-      { icon: "🌍", name: "Planet", desc: "Menjaga kelestarian lingkungan melalui praktik perkebunan berkelanjutan dan perlindungan keanekaragaman hayati." },
-      { icon: "🌿", name: "Product", desc: "Produk berkualitas tinggi yang dihasilkan dari proses ramah lingkungan dan berkelanjutan." },
-      { icon: "📈", name: "Profit", desc: "Pertumbuhan ekonomi yang seimbang dengan tanggung jawab sosial dan lingkungan." }
-    ]
-  },
-  products: {
-    subtitle: "Our Products",
-    title: "Palm Products",
-    desc: "Dua produk utama perusahaan adalah crude palm oil (CPO) dan palm kernel (PK).",
-    items: [
-      { icon: "🫒", name: "Crude Palm Oil (CPO)", desc: "Minyak kelapa sawit mentah yang diproduksi melalui proses ramah lingkungan, digunakan sebagai bahan baku berbagai produk pangan dan non-pangan." },
-      { icon: "🌰", name: "Palm Kernel (PK)", desc: "Inti sawit yang diolah menjadi produk bernilai tambah, termasuk minyak inti sawit dan bungkil sebagai pakan ternak." }
-    ]
-  },
-  news: {
-    subtitle: "Berita & Artikel",
-    title: "Kabar Terbaru dari KPKS Jadi Mandiri",
-    desc: "Ikuti perkembangan, inovasi, dan kegiatan terbaru perusahaan.",
-    items: [
+  "sustainability": {
+    "subtitle": "Keberlanjutan",
+    "title": "Pemberdayaan Masyarakat Lokal dan Pengelolaan Tenaga Kerja",
+    "desc": "Empat pilar utama yang menjadi landasan keberlanjutan kami: People, Planet, Product, Profit.",
+    "pillars": [
       {
-        id: "prime-agri-raih-sertifikasi-ispo-2026",
-        title: "KPKS Jadi Mandiri Raih Sertifikasi ISPO 2026",
-        excerpt: "Perusahaan berhasil mempertahankan sertifikasi Indonesian Sustainable Palm Oil untuk seluruh unit perkebunan.",
-        content: "<p>PT KPKS Jadi Mandiri Tbk. kembali meraih sertifikasi Indonesian Sustainable Palm Oil (ISPO) untuk tahun 2026. Sertifikasi ini mencakup seluruh unit perkebunan dan pabrik kelapa sawit perusahaan.</p><p>Direktur Utama menyampaikan bahwa pencapaian ini merupakan hasil kerja keras seluruh tim dalam menerapkan praktik perkebunan berkelanjutan sesuai standar nasional dan internasional.</p><p>Ke depan, perusahaan akan terus berkomitmen meningkatkan kualitas pengelolaan perkebunan dan kesejahteraan masyarakat sekitar.</p>",
-        image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=1200&auto=format&fit=crop",
-        date: "2026-03-15",
-        author: "Tim Komunikasi",
-        category: "Sertifikasi",
-        featured: true
+        "icon": "👥",
+        "name": "People",
+        "desc": "Sumber daya manusia, baik internal maupun eksternal. Kesejahteraan karyawan adalah cerminan keberhasilan perusahaan."
       },
       {
-        id: "program-pemberdayaan-petani-mitra-2026",
-        title: "Program Pemberdayaan Petani Mitra Diperluas",
-        excerpt: "KPKS Jadi Mandiri memperluas program kemitraan dengan petani swadaya di Sumatera dan Kalimantan.",
-        content: "<p>KPKS Jadi Mandiri memperluas program pemberdayaan petani mitra ke wilayah Sumatera dan Kalimantan. Program ini mencakup pelatihan budidaya, akses pupuk organik, dan pendampingan pascapanen.</p><p>Sejak dimulai, program telah melibatkan lebih dari 500 petani swadaya dengan peningkatan hasil panen rata-rata 20%.</p>",
-        image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop",
-        date: "2026-02-20",
-        author: "Divisi CSR",
-        category: "Pemberdayaan",
-        featured: false
+        "icon": "🌍",
+        "name": "Planet",
+        "desc": "Menjaga kelestarian lingkungan melalui praktik perkebunan berkelanjutan dan perlindungan keanekaragaman hayati."
       },
       {
-        id: "inovasi-energi-biogas-pabrik",
-        title: "Inovasi Energi Biogas di Pabrik Kelapa Sawit",
-        excerpt: "Pemanfaatan limbah cair menjadi biogas mengurangi emisi karbon hingga 35%.",
-        content: "<p>Pabrik kelapa sawit KPKS Jadi Mandiri mulai mengoperasikan instalasi biogas yang mengolah limbah cair (POME) menjadi energi listrik. Inisiatif ini mengurangi emisi karbon hingga 35% dan menyuplai kebutuhan listrik pabrik.</p><p>Teknologi ini sejalan dengan komitmen perusahaan terhadap transisi energi bersih dan ekonomi sirkular.</p>",
-        image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop",
-        date: "2026-01-10",
-        author: "Divisi Teknik",
-        category: "Inovasi",
-        featured: false
+        "icon": "🌿",
+        "name": "Product",
+        "desc": "Produk berkualitas tinggi yang dihasilkan dari proses ramah lingkungan dan berkelanjutan."
+      },
+      {
+        "icon": "📈",
+        "name": "Profit",
+        "desc": "Pertumbuhan ekonomi yang seimbang dengan tanggung jawab sosial dan lingkungan."
       }
     ]
   },
-  gallery: {
-    subtitle: "Galeri Kegiatan",
-    title: "Momen & Aktivitas Kami",
-    desc: "Dokumentasi kegiatan perkebunan, pelatihan, dan komunitas.",
-    items: [
-      { id: "g1", image: "https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=800&auto=format&fit=crop", caption: "Panen kelapa sawit berkelanjutan" },
-      { id: "g2", image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop", caption: "Pelatihan petani mitra" },
-      { id: "g3", image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=800&auto=format&fit=crop", caption: "Instalasi biogas pabrik" },
-      { id: "g4", image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800&auto=format&fit=crop", caption: "Audit sertifikasi ISPO" },
-      { id: "g5", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=800&auto=format&fit=crop", caption: "Pembibitan bibit unggul" },
-      { id: "g6", image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=800&auto=format&fit=crop", caption: "Kegiatan komunitas lokal" }
+  "products": {
+    "subtitle": "Our Team",
+    "title": "Tim Sukses Kami",
+    "desc": "Kami Memiliki Beberapa Tim Sukses yang Sangat Semangat Bekerja Bersama Kami.",
+    "items": [
+      {
+        "icon": "🫒",
+        "name": "Pemanen",
+        "desc": "Minyak kelapa sawit mentah yang diproduksi melalui proses ramah lingkungan, digunakan sebagai bahan baku berbagai produk pangan dan non-pangan."
+      },
+      {
+        "icon": "🌰",
+        "name": "Semprot",
+        "desc": "Inti sawit yang diolah menjadi produk bernilai tambah, termasuk minyak inti sawit dan bungkil sebagai pakan ternak."
+      },
+      {
+        "icon": "📦",
+        "name": "Perawatan",
+        "desc": "Deskripsi produk...Inti sawit yang diolah menjadi produk bernilai tambah, termasuk minyak inti sawit dan bungkil sebagai pakan ternak."
+      },
+      {
+        "icon": "📦",
+        "name": "Pengurus KPKS",
+        "desc": "Deskripsi produk...Inti sawit yang diolah menjadi produk bernilai tambah, termasuk minyak inti sawit dan bungkil sebagai pakan ternak."
+      }
     ]
   },
-  footer: {
-    companyName: "PT KPKS Jadi Mandiri Tbk",
-    tagline: "Agribisnis terintegrasi yang berkelanjutan.",
-    email: "info@primeagri.co.id",
-    phone: "+62 21 1234 5678",
-    address: "Jakarta, Indonesia",
-    copyright: "© 2026 PT KPKS Jadi Mandiri Tbk. All rights reserved."
+  "news": {
+    "subtitle": "Hasil Review KPKS Jadi Mandiri",
+    "title": "NEWS & ARTICLE",
+    "desc": "",
+    "items": [
+      {
+        "id": "artikel-1792574678189",
+        "title": "Tiga KUD Desa Karyamukti Sukses Panen Sawit Berkat Pupuk Organik dan Pendampingan Pemerintah",
+        "category": "Umum",
+        "date": "2026-10-21",
+        "author": "Admin",
+        "image": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop",
+        "excerpt": "Ringkasan...",
+        "content": "Sejak replanting tiga tahun lalu melalui Program Sawit Rakyat, kini petani kelapa sawit yang tergabung dalam Tiga KUD di Desa Karyamukti Kecamatan Mesuji Raya Kabupaten OKI bisa menikmati  hasilnya. Pj Bupati OKI, Asmar Wijaya mengatakan, PSR merupakan bantuan pemerintah pusat melalui Badan Pengelola Dana Perkebunan Kelapa Sawit (BPDPKS), yang di dorong percepatannya oleh Dinas perkebunan dan peternakan Kabupaten OKI dalam melengkapi persyaratan, pengukuran GIS, verifikasi hingga pendampingan kepada kelompok sasaran.​\n<p><br /></p>\n\"Alhamdulillah saya bahagia mereka bisa melakukan panen,\"terangnya Jumat (20/12). Masih kata dia, replanting sawit rakyat di Kabupaten OKI merupakan terluas di Indonesia. Program ini akan terus meningkat seiring asta cita Presiden Prabowo yang memprioritaskan petani. Mari semua stakeholder membantu dan mendukung petani plasma ini agar terus berhasil. Kalau petani bisa terus panen maka kesejahteraannya masyarakat di OKI meningkat karena roda perekonomian berputar dengan baik. Nah inilah sebenarnya yang diharapkan.\n<p><br /></p>\nSementara itu. Ketua KUD Bina Sejahtera desa Kerta Mukti, H Azhar SP mengaku,  panen perdana pada hari ini mencakup kelompok tani pada 3 KUD dengan luasan masing-masing antara lain, KUD Bina Sejahtera mencapai 1.146 hektare, KUD Maju Lancar seluas 1.860 hektare dan KUD Sedia Mukti dengan luasan 1.200 Ha Pihaknya sangat berterimakasih kepada pemerintah khususnya Dinas Perkebunan dan Peternakan OKI yang sudah mendukung program replanting sawit rakyat, yang sering turun langsung memberi pendampingan. \" Kami tidak bisa membayangkan untuk kebutuhan replanting mencapai Rp 60 juta/hektare dari mana kami bisa meremajakan sawit  jika tidak dibantu pemerintah,\"imbuhnya.\n<p><br /></p>\nMengapa hasil panen ini bis maksimal dan panen lebih awa, karena didukung sejumlah faktor pendukung, bibit unggul berkualitas. Selain itu petani sawit rakyat di wilayah ini juga melakukan replanting dengan menerapkan standar praktik pertanian yang baik, serta tata kelola kelembagaan dan manajemen pekebun yang baik berkat pendampingan oleh PT Sampoerna Agro selaku perusahaan pembina di wilayah sekitar. Dari bibit yang unggul sampai dengan masa pemeliharaan dampingi oleh Sampoerna Agro,  hasil diperoleh memuaskan.Rahasia sawit petani di wilayah ini lebih cepat panen serta TBS nya lebih besar berkat penggunaan pupuk organik.\n<p><br /></p>\n\"Kami beruntung pengolahan pupuk organik tersebut jadi unit sendiri dibawah naungan KUD Bina Sejahtera,\"bebernya. Pihaknya juga memanfaatkan limbah sawit untuk memproduksi pupuk sendiri. Bahannya tandan kosong, solid, limbah cair serta memanfaatkan kotoran ternak. Dicampur dengan QRR, dolomit dengan proses fermentasi selama 7 hari. Hasil pemupukan melalui pupuk organik ini mampu mengurangi biaya produksi hingga 50 persen. Alhasil, pundi-pundi cuan petani  pun kian tebal. Hamparan kelapa sawit ratusan hektare di wilayah ini telah membuka peluang kerja bagi masyarakat setempat.\n<p><br /></p>\nDirinya bercerita perkebunan kelapa sawit  telah memberi kesempatan kerja ratusan orang, juga bagi remaja putus sekolah. Ada tukang panen, tukang tanam, supir truk bahkan dibangunkan rumah untuk penjaga kebun.\" Listrik, airnya ditanggung oleh KUD dan digaji Rp3 juta/bulan,\"jelasnya. Selain dari kebun, masyarakat sekitar juga memperoleh penghasilan dari unit pengolahan pupuk milik KUD.Masyarakat yang punya hewan ternak diminta kumpulkan kotoran ternaknya kita beli 10 ribu/karung. Bahkan air leri juga bernilai ekonomis jadi bahan pembuatan pupuk cair. Ia  berharap mendapat pendampingan dari pemerintah dalam pengurusan izin produksi pupuk organik mereka agar hasilnya bisa dimanfaatkan oleh petani sawit lain daerah."
+      },
+      {
+        "id": "artikel-1792555696018",
+        "title": "PT Sampoerna Agro Tbk Komitmen Keberlanjutan dan Kesiapan Menghadapi Tantangan Produksi Untuk Mendukung Kesejahteraan Petani Mandiri",
+        "category": "Umum",
+        "date": "2026-10-21",
+        "author": "Admin",
+        "image": "https://cms.sampoernaagro.com/storage/files/shares/NEWS/2025/20250527_115640.jpg",
+        "excerpt": "KPKS Jadi Mandiri Tbk, Secara Konsisten menunjukkan komitmennya terhadap Praktik Bisnis yang Berkelanjutan.",
+        "content": "<p>Dalam industri kelapa sawit, PT Sampoerna Agro Tbk, secara konsisten menunjukkan komitmennya terhadap praktik bisnis yang berkelanjutan. Melalui kegiatan Gathering Pemasok TBS yang diselenggarakan di Training Center, Kebun Mesuji, Perseroan memberi perhatian khusus terhadap Kebijakan dan Komitmen Keberlanjutan Perusahaan, implementasi standar Prinsip dan Kriteria (P&C) Roundtable on Sustainable Palm Oil (RSPO), serta pembekalan pengetahuan kepada para pemasok pihak ketiga perihal dinamika produksi dan tantangan kekeringan yang mungkin dihadapi. PT Sampoerna Agro Tbk secara proaktif mengkomunikasikan dan memperkuat komitment keberlanjutan di seluruh lini operasional, termasuk memberikan dukungan  kepada para pemasok, baik dari skema plasma maupun pihak ketiga yang juga terdiri dari pekebun mandiri.</p><br /><p>Acara Gathering dilaksanakan pada 27 Mei 2025 dan melibatkan 6 dari 7 pemasok pihak ketiga TBS, serta 22 perwakilan pekebun mandiri. Seluruh peserta mendapatkan penjelasan mendalam mengenai Kebijakan Keberlanjutan Perusahaan, dan menghimbau untuk dapat menerapkannya selarasdengan kebijakan tersebut. Di samping itu, para pemasok juga diminta untuk mengisi formulir penilaian terkait tingkat pemenuhan terhadap Kebijakan Keberlanjutan Perusahaan.</p><br /><p>Materi pembekalan dalam acara ini mencakup praktik budidaya kelapa sawit terbaik yang disampaikan oleh tim perusahaan (R&D, Sustainability, dan Commercial), mulai dari pemilihan bibit unggul, perawatan tanaman pada fase TBM dan TM, penanganan hama dan penyakit, hingga antisipasi dampak kekeringan terhadap tanaman sawit. Pengetahuan ini diharapkan dapat membantu para petani pihak ketiga dalam mengoptimalkan potensi lahan dan meningkatkan produksi TBS, yang pada akhirnya berkontribusi pada peningkatan kesejahteraan masyarakat sekitar.</p>"
+      }
+    ]
+  },
+  "gallery": {
+    "subtitle": "Gallery",
+    "title": "Foto Kami Bersama",
+    "desc": "",
+    "items": [
+      {
+        "image": "https://cms.sampoernaagro.com/storage/files/shares/Sampoerna-Agro.jpg",
+        "caption": "Cara Panen Kita",
+        "id": "g1792576940525kn5t"
+      },
+      {
+        "image": "https://cms.sampoernaagro.com/storage/files/shares/Untitled-1.jpg",
+        "caption": "Para Pemupuk Kita",
+        "id": "g179257694052597jz"
+      },
+      {
+        "image": "https://cms.sampoernaagro.com/storage/files/shares/about-us/Organisationstructure1.jpg",
+        "caption": "Buah yang di Panen Kita",
+        "id": "g1792576940525jn9z"
+      },
+      {
+        "image": "https://cms.sampoernaagro.com/storage/files/shares/SUSTAINABILITY/5f92d16fa1507.jpg",
+        "caption": "Jalan Produksi Kita",
+        "id": "g17925769405259fg4"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574286154-0a241f75-cb03-49f3-ad33-fea490bb7725.jpg",
+        "caption": "Apel Pagi Tim Kita",
+        "id": "g17925769405253nyb"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574309471-PXL_20250730_054418102.jpg",
+        "caption": "Anggota KPKS Jadi Mandiri",
+        "id": "g17925769405253y9m"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574414567-0ee4abe2-9ae0-4fd5-8cf3-578fd6bbdfd2.jpg",
+        "caption": "Apel Pagi Semprot Kita",
+        "id": "g1792576940525ubpk"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574427740-4e837eb9-0b6d-4284-b9ae-f647d98882f6.jpg",
+        "caption": "Siswi-Siswi PKL Desa Kita",
+        "id": "g17925769405258hga"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574438585-7eac5619-4ff3-4b05-8805-d0f63144c9b6.jpg",
+        "caption": "Rapat Anggota Kelompok Kita",
+        "id": "g17925769405253by8"
+      },
+      {
+        "image": "https://raw.githubusercontent.com/kudjadi/beritafaktanews/main/uploads/1792574450384-24a7a122-bfca-49f4-a940-e956817f9992.jpg",
+        "caption": "Kunjungan Mitra Kita",
+        "id": "g1792576940525xlhj"
+      }
+    ]
+  },
+  "footer": {
+    "companyName": "KPKS Jadi Mandiri",
+    "tagline": "Agribisnis terintegrasi yang berkelanjutan.",
+    "email": "info@primeagri.co.id",
+    "phone": "+62 21 1234 5678",
+    "address": "Jakarta, Indonesia",
+    "copyright": "© 2026 KPKS Jadi Mandiri. All rights reserved."
   }
 };
 
