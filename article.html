@@ -20,26 +20,26 @@
       <div class="flex justify-between items-center h-16">
         <a href="index.html" class="flex items-center gap-2">
           <div id="nav-logo" class="w-8 h-8 rounded-lg bg-emerald-800 flex items-center justify-center text-white font-bold">P</div>
-          <span id="nav-title" class="text-xl font-bold text-emerald-800 tracking-tight">PRIME AGRI</span>
+          <span id="nav-title" class="text-lg sm:text-xl font-bold text-emerald-800 tracking-tight">PRIME AGRI</span>
         </a>
-        <a href="index.html#news" class="text-sm font-medium text-gray-700 hover:text-emerald-700 transition">← Kembali ke Berita</a>
+        <a href="index.html#news" class="text-xs sm:text-sm font-medium text-gray-700 hover:text-emerald-700 transition">← Kembali</a>
       </div>
     </div>
   </nav>
 
-  <main id="article-container" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+  <main id="article-container" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-20">
     <div id="article-loading" class="text-center py-20 text-gray-400">Memuat artikel...</div>
     <article id="article-content" class="hidden">
-      <div class="mb-4 flex items-center gap-3 text-sm">
-        <span id="art-category" class="font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full"></span>
-        <time id="art-date" class="text-gray-500"></time>
+      <div class="mb-4 flex items-center gap-3 text-sm flex-wrap">
+        <span id="art-category" class="font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-xs sm:text-sm"></span>
+        <time id="art-date" class="text-gray-500 text-xs sm:text-sm"></time>
       </div>
-      <h1 id="art-title" class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"></h1>
-      <p id="art-author" class="text-sm text-gray-500 mb-8"></p>
-      <img id="art-image" src="" alt="" class="w-full rounded-2xl shadow-lg mb-8 aspect-video object-cover">
-      <div id="art-body" class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-4"></div>
+      <h1 id="art-title" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"></h1>
+      <p id="art-author" class="text-sm text-gray-500 mb-6 sm:mb-8"></p>
+      <img id="art-image" src="" alt="" class="w-full rounded-2xl shadow-lg mb-6 sm:mb-8 aspect-video object-cover">
+      <div id="art-body" class="prose prose-sm sm:prose-lg max-w-none text-gray-700 leading-relaxed space-y-4"></div>
       <div class="mt-12 pt-8 border-t border-gray-200">
-        <a href="index.html#news" class="inline-flex items-center text-emerald-700 font-semibold hover:text-emerald-800 transition">
+        <a href="index.html#news" class="inline-flex items-center text-emerald-700 font-semibold hover:text-emerald-800 transition text-sm sm:text-base">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
           Kembali ke Berita
         </a>

@@ -198,9 +198,6 @@ const DataStore = {
   }
 };
 
-/* =========================================================
-   GITHUB UPLOADER
-   ========================================================= */
 const GitHubUploader = {
   getConfig() {
     const cfg = DataStore.get().github || {};
@@ -217,9 +214,7 @@ const GitHubUploader = {
     if (token) localStorage.setItem('prime_agri_gh_token', token);
     else localStorage.removeItem('prime_agri_gh_token');
   },
-  getToken() {
-    return localStorage.getItem('prime_agri_gh_token') || '';
-  },
+  getToken() { return localStorage.getItem('prime_agri_gh_token') || ''; },
   async testToken() {
     const { token } = this.getConfig();
     if (!token) return { ok: false, error: 'Token belum diisi' };
@@ -236,23 +231,18 @@ const GitHubUploader = {
   },
   async upload(file, onProgress) {
     const { owner, repo, branch, path, token } = this.getConfig();
-    if (!token) throw new Error('Token GitHub belum diisi. Buka Pengaturan Situs → GitHub Upload.');
-
+    if (!token) throw new Error('Token GitHub belum diisi. Buka Pengaturan Situs.');
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
     const filename = `${path}/${Date.now()}-${safeName}`;
-
     const base64 = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result.split(',')[1]);
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
-
     if (onProgress) onProgress(30);
-
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filename}`;
     const body = { message: `upload: ${safeName}`, content: base64, branch };
-
     const res = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -262,21 +252,127 @@ const GitHubUploader = {
       },
       body: JSON.stringify(body)
     });
-
     if (onProgress) onProgress(80);
-
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.message || `HTTP ${res.status}`);
     }
-
     if (onProgress) onProgress(100);
-    const publicUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filename}`;
-    return { url: publicUrl, path: filename };
+    return { url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filename}`, path: filename };
+  }
+};
+
+/* =========================================================
+   GITHUB DATA PUSHER — hanya ganti blok DEFAULT_DATA
+   ========================================================= */
+const GitHubDataPusher = {
+  getConfig() {
+    const cfg = DataStore.get().github || {};
+    const token = localStorage.getItem('prime_agri_gh_token') || '';
+    return {
+      owner: cfg.owner || 'kudjadi',
+      repo: cfg.repo || 'beritafaktanews',
+      branch: cfg.branch || 'main',
+      token
+    };
+  },
+
+  async getFile(path) {
+    const { owner, repo, branch, token } = this.getConfig();
+    if (!token) throw new Error('Token GitHub belum diisi.');
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${res.status} saat ambil file`);
+    }
+    const data = await res.json();
+    // decode base64 → string
+    const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+    return { sha: data.sha, content: decoded };
+  },
+
+  // Ganti HANYA blok "const DEFAULT_DATA = {...};" di file lama
+  replaceDefaultData(oldContent, newData) {
+    const jsonStr = JSON.stringify(newData, null, 2);
+    const newBlock = `const DEFAULT_DATA = ${jsonStr};`;
+
+    // Cari awal & akhir blok DEFAULT_DATA dengan pencocokan kurung kurawal
+    const startMarker = 'const DEFAULT_DATA = ';
+    const startIdx = oldContent.indexOf(startMarker);
+    if (startIdx === -1) {
+      throw new Error('Tidak menemukan "const DEFAULT_DATA" di js/data.js');
+    }
+
+    // Cari '{' pertama setelah startIdx
+    let braceStart = oldContent.indexOf('{', startIdx);
+    if (braceStart === -1) throw new Error('Format DEFAULT_DATA tidak valid.');
+
+    // Hitung kurung kurawal sampai seimbang
+    let depth = 0;
+    let braceEnd = -1;
+    for (let i = braceStart; i < oldContent.length; i++) {
+      const ch = oldContent[i];
+      if (ch === '{') depth++;
+      else if (ch === '}') {
+        depth--;
+        if (depth === 0) { braceEnd = i; break; }
+      }
+    }
+    if (braceEnd === -1) throw new Error('Kurung kurawal DEFAULT_DATA tidak seimbang.');
+
+    // Cari titik koma setelah braceEnd
+    let semicolonIdx = oldContent.indexOf(';', braceEnd);
+    if (semicolonIdx === -1) semicolonIdx = braceEnd;
+
+    const before = oldContent.slice(0, startIdx);
+    const after = oldContent.slice(semicolonIdx + 1);
+
+    return before + newBlock + after;
+  },
+
+  async pushData(data, commitMessage) {
+    const { owner, repo, branch, token } = this.getConfig();
+    if (!token) throw new Error('Token GitHub belum diisi. Buka Pengaturan Situs.');
+    const path = 'js/data.js';
+
+    // 1. Ambil file lama
+    const { sha, content } = await this.getFile(path);
+
+    // 2. Ganti hanya blok DEFAULT_DATA
+    const updated = this.replaceDefaultData(content, data);
+
+    // 3. Commit
+    const base64 = btoa(unescape(encodeURIComponent(updated)));
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const body = {
+      message: commitMessage || 'chore: update content via CMS',
+      content: base64,
+      sha,
+      branch
+    };
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+    const result = await res.json();
+    return { url: result.content?.html_url, commit: result.commit?.sha };
   }
 };
 
 window.DEFAULT_DATA = DEFAULT_DATA;
 window.DataStore = DataStore;
 window.GitHubUploader = GitHubUploader;
+window.GitHubDataPusher = GitHubDataPusher;
 window.deepClone = deepClone;

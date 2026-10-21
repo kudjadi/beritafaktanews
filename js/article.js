@@ -86,19 +86,6 @@
     });
     document.head.appendChild(ld);
 
-    const bc = document.createElement('script');
-    bc.type = 'application/ld+json';
-    bc.textContent = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": location.origin + '/' },
-        { "@type": "ListItem", "position": 2, "name": "Berita", "item": location.origin + '/index.html#news' },
-        { "@type": "ListItem", "position": 3, "name": article.title }
-      ]
-    });
-    document.head.appendChild(bc);
-
     if (loading) loading.classList.add('hidden');
     if (content) content.classList.remove('hidden');
   }

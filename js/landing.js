@@ -5,6 +5,12 @@
 (function () {
   'use strict';
 
+  // Guard: pastikan DataStore tersedia
+  if (typeof window.DataStore === 'undefined') {
+    console.error('[Landing] DataStore tidak ditemukan. Pastikan js/data.js dimuat sebelum js/landing.js.');
+    return;
+  }
+
   function esc(s) {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
@@ -18,7 +24,13 @@
   }
 
   function render() {
-    const d = DataStore.get();
+    let d;
+    try {
+      d = DataStore.get();
+    } catch (err) {
+      console.error('[Landing] Gagal memuat data:', err);
+      return;
+    }
 
     document.title = d.site.title;
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -28,7 +40,6 @@
     if (navLogo) navLogo.textContent = d.site.favicon || 'P';
     if (navTitle) navTitle.textContent = d.site.title.toUpperCase();
 
-    /* HERO */
     setText('hero-label', d.hero.label);
     setText('hero-title', d.hero.title);
     setText('hero-desc', d.hero.desc);
@@ -41,14 +52,12 @@
       heroBg.style.backgroundPosition = 'center 30%';
     }
 
-    /* ABOUT */
     setText('about-subtitle', d.about.subtitle);
     setText('about-title', d.about.title);
     setText('about-para1', d.about.para1);
     setText('about-para2', d.about.para2);
     setText('about-quote', d.about.quote);
 
-    /* SUSTAINABILITY */
     setText('sus-subtitle', d.sustainability.subtitle);
     setText('sus-title', d.sustainability.title);
     setText('sus-desc', d.sustainability.desc);
@@ -63,7 +72,6 @@
       `).join('');
     }
 
-    /* FUNDAMENTALS */
     setText('fund-subtitle', d.fundamentals.subtitle);
     setText('fund-title', d.fundamentals.title);
     setText('fund-para1', d.fundamentals.para1);
@@ -80,7 +88,6 @@
       `).join('');
     }
 
-    /* PRODUCTS */
     setText('prod-subtitle', d.products.subtitle);
     setText('prod-title', d.products.title);
     setText('prod-desc', d.products.desc);
@@ -97,7 +104,6 @@
       `).join('');
     }
 
-    /* NEWS */
     setText('news-subtitle', d.news?.subtitle);
     setText('news-title', d.news?.title);
     setText('news-desc', d.news?.desc);
@@ -127,7 +133,6 @@
       `).join('');
     }
 
-    /* GALLERY CAROUSEL */
     setText('gallery-subtitle', d.gallery?.subtitle);
     setText('gallery-title', d.gallery?.title);
     setText('gallery-desc', d.gallery?.desc);
@@ -155,7 +160,6 @@
       track.addEventListener('scroll', updateDots);
     }
 
-    /* FOOTER */
     const footDesc = document.getElementById('foot-desc');
     if (footDesc) footDesc.innerHTML = `${esc(d.footer.companyName)}<br>${esc(d.footer.tagline)}`;
     setText('foot-address', d.footer.address);
@@ -164,7 +168,6 @@
     setText('foot-phone', d.footer.phone);
     setText('foot-copy', d.footer.copyright);
 
-    /* SEO */
     const ogTitle = document.getElementById('og-title');
     if (ogTitle) ogTitle.setAttribute('content', d.site.title + ' — ' + d.hero.title);
     const ogDesc = document.getElementById('og-desc');
@@ -190,7 +193,6 @@
     if (el) el.textContent = value ?? '';
   }
 
-  /* CAROUSEL */
   window.prevSlide = function () {
     const track = document.getElementById('gallery-track');
     if (!track) return;
@@ -232,7 +234,6 @@
     });
   }
 
-  /* LIGHTBOX */
   let lbIndex = 0;
   window.openLightbox = function (i) {
     lbIndex = i;
@@ -275,7 +276,6 @@
     if (e.key === 'ArrowRight') nextLightbox();
   });
 
-  /* INIT */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render);
   } else {
@@ -283,6 +283,6 @@
   }
   window.addEventListener('data-updated', render);
   window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) render();
+    if (e.key === 'prime_agri_data_v1') render();
   });
 })();

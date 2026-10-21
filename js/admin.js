@@ -8,17 +8,40 @@
   let currentData = DataStore.get();
 
   const pageTitles = {
-    dashboard:    { title: 'Dashboard',            subtitle: 'Ringkasan dan pengaturan konten landing page' },
-    hero:         { title: 'Hero Section',         subtitle: 'Atur konten bagian hero di landing page' },
-    about:        { title: 'About / Company Profile', subtitle: 'Atur profil perusahaan dan kutipan' },
-    fundamentals: { title: 'Fundamental Bisnis',   subtitle: 'Atur bagian building the fundamentals' },
-    sustainability:{ title: 'Keberlanjutan',       subtitle: 'Atur empat pilar keberlanjutan' },
-    products:     { title: 'Produk',               subtitle: 'Kelola produk yang ditampilkan' },
-    news:         { title: 'Berita / Artikel',     subtitle: 'Kelola artikel dan berita perusahaan' },
+    dashboard:    { title: 'Dashboard',            subtitle: 'Ringkasan konten landing page' },
+    hero:         { title: 'Hero Section',         subtitle: 'Atur konten hero' },
+    about:        { title: 'About / Profile',      subtitle: 'Atur profil perusahaan' },
+    fundamentals: { title: 'Fundamental Bisnis',   subtitle: 'Atur bagian fundamental' },
+    sustainability:{ title: 'Keberlanjutan',       subtitle: 'Atur empat pilar' },
+    products:     { title: 'Produk',               subtitle: 'Kelola produk' },
+    news:         { title: 'Berita / Artikel',     subtitle: 'Kelola artikel' },
     gallery:      { title: 'Galeri Foto',          subtitle: 'Kelola foto kegiatan' },
-    footer:       { title: 'Footer & Kontak',      subtitle: 'Atur informasi kontak dan footer' },
-    settings:     { title: 'Pengaturan Situs',     subtitle: 'Konfigurasi situs & GitHub upload' },
-    backup:       { title: 'Import / Export',      subtitle: 'Backup dan restore data konten' }
+    footer:       { title: 'Footer & Kontak',      subtitle: 'Atur kontak' },
+    settings:     { title: 'Pengaturan Situs',     subtitle: 'Situs & GitHub upload' },
+    backup:       { title: 'Import / Export',      subtitle: 'Backup & push ke GitHub' }
+  };
+
+  /* ============ SIDEBAR MOBILE ============ */
+  window.toggleSidebar = function () {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.contains('translate-x-0');
+    if (isOpen) {
+      sidebar.classList.remove('translate-x-0');
+      sidebar.classList.add('-translate-x-full');
+      if (overlay) overlay.classList.add('hidden');
+    } else {
+      sidebar.classList.remove('-translate-x-full');
+      sidebar.classList.add('translate-x-0');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+  };
+  window.closeSidebar = function () {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) { sidebar.classList.add('-translate-x-full'); sidebar.classList.remove('translate-x-0'); }
+    if (overlay) overlay.classList.add('hidden');
   };
 
   window.switchTab = function (tabName, element) {
@@ -32,9 +55,11 @@
     const sEl = document.getElementById('page-subtitle');
     if (tEl) tEl.textContent = info.title;
     if (sEl) sEl.textContent = info.subtitle;
+    // tutup sidebar di mobile setelah pilih menu
+    if (window.innerWidth < 1024) closeSidebar();
   };
 
-  /* TOAST */
+  /* ============ TOAST ============ */
   function showToast(message, type) {
     const toast = document.getElementById('toast');
     const msgEl = document.getElementById('toast-message');
@@ -51,7 +76,7 @@
   }
   window.showToast = showToast;
 
-  /* HELPERS */
+  /* ============ HELPERS ============ */
   function getByPath(obj, path) {
     return path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
   }
@@ -71,7 +96,6 @@
     return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   }
 
-  /* FILL FORM */
   function fillForm() {
     document.querySelectorAll('.field').forEach(el => {
       const path = el.dataset.field;
@@ -110,22 +134,22 @@
     });
   }
 
-  /* PILLARS */
+  /* ============ PILLARS ============ */
   function renderPillars() {
     const wrap = document.getElementById('pillars-editor');
     if (!wrap) return;
     const pillars = currentData.sustainability?.pillars || [];
     wrap.innerHTML = pillars.map((p, i) => `
-      <div class="border border-gray-200 rounded-lg p-4" data-pillar-index="${i}">
+      <div class="border border-gray-200 rounded-lg p-3 sm:p-4" data-pillar-index="${i}">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500">Pilar #${i + 1}</span>
           <button type="button" onclick="removePillar(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
         </div>
-        <div class="grid grid-cols-3 gap-2 mb-2">
-          <input data-pillar="${i}" data-key="icon" value="${escAttr(p.icon)}" placeholder="Icon" class="pillar-field border border-gray-300 rounded px-2 py-1 text-sm">
-          <input data-pillar="${i}" data-key="name" value="${escAttr(p.name)}" placeholder="Nama" class="pillar-field border border-gray-300 rounded px-2 py-1 text-sm col-span-2">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+          <input data-pillar="${i}" data-key="icon" value="${escAttr(p.icon)}" placeholder="Icon" class="pillar-field border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <input data-pillar="${i}" data-key="name" value="${escAttr(p.name)}" placeholder="Nama" class="pillar-field border border-gray-300 rounded px-2 py-1.5 text-sm sm:col-span-2">
         </div>
-        <textarea data-pillar="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="pillar-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(p.desc)}</textarea>
+        <textarea data-pillar="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="pillar-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">${escHtml(p.desc)}</textarea>
       </div>
     `).join('');
     wrap.querySelectorAll('.pillar-field').forEach(el => {
@@ -146,22 +170,22 @@
     renderPillars(); updateStats();
   };
 
-  /* PRODUCTS */
+  /* ============ PRODUCTS ============ */
   function renderProducts() {
     const wrap = document.getElementById('products-editor');
     if (!wrap) return;
     const items = currentData.products?.items || [];
     wrap.innerHTML = items.map((p, i) => `
-      <div class="border border-gray-200 rounded-lg p-4" data-product-index="${i}">
+      <div class="border border-gray-200 rounded-lg p-3 sm:p-4" data-product-index="${i}">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500">Produk #${i + 1}</span>
           <button type="button" onclick="removeProduct(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
         </div>
-        <div class="grid grid-cols-3 gap-2 mb-2">
-          <input data-product="${i}" data-key="icon" value="${escAttr(p.icon)}" placeholder="Icon" class="product-field border border-gray-300 rounded px-2 py-1 text-sm">
-          <input data-product="${i}" data-key="name" value="${escAttr(p.name)}" placeholder="Nama Produk" class="product-field border border-gray-300 rounded px-2 py-1 text-sm col-span-2">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+          <input data-product="${i}" data-key="icon" value="${escAttr(p.icon)}" placeholder="Icon" class="product-field border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <input data-product="${i}" data-key="name" value="${escAttr(p.name)}" placeholder="Nama Produk" class="product-field border border-gray-300 rounded px-2 py-1.5 text-sm sm:col-span-2">
         </div>
-        <textarea data-product="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="product-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(p.desc)}</textarea>
+        <textarea data-product="${i}" data-key="desc" rows="2" placeholder="Deskripsi" class="product-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">${escHtml(p.desc)}</textarea>
       </div>
     `).join('');
     wrap.querySelectorAll('.product-field').forEach(el => {
@@ -182,7 +206,7 @@
     renderProducts(); updateStats();
   };
 
-  /* NEWS (with live preview + upload) */
+  /* ============ NEWS ============ */
   function renderNews() {
     const wrap = document.getElementById('news-editor');
     if (!wrap) return;
@@ -190,31 +214,31 @@
     const items = currentData.news.items || [];
     wrap.innerHTML = items.map((n, i) => `
       <details class="border border-gray-200 rounded-lg" ${i === 0 ? 'open' : ''}>
-        <summary class="cursor-pointer px-4 py-3 flex items-center justify-between hover:bg-gray-50">
-          <span class="text-sm font-medium text-gray-800 truncate">📰 ${escHtml(n.title || 'Artikel Baru')}</span>
-          <div class="flex gap-2">
-            <button type="button" onclick="event.preventDefault(); toggleNewsPreview(${i})" class="text-brand-600 hover:text-brand-800 text-xs font-medium">👁 Preview</button>
-            <button type="button" onclick="event.preventDefault(); removeNews(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+        <summary class="cursor-pointer px-3 sm:px-4 py-3 flex items-center justify-between hover:bg-gray-50 gap-2">
+          <span class="text-sm font-medium text-gray-800 truncate flex-1 min-w-0">📰 ${escHtml(n.title || 'Artikel Baru')}</span>
+          <div class="flex gap-2 flex-shrink-0">
+            <button type="button" onclick="event.preventDefault(); toggleNewsPreview(${i})" class="text-brand-600 hover:text-brand-800 text-xs font-medium whitespace-nowrap">👁 Preview</button>
+            <button type="button" onclick="event.preventDefault(); removeNews(${i})" class="text-red-500 hover:text-red-700 text-xs whitespace-nowrap">Hapus</button>
           </div>
         </summary>
-        <div class="p-4 space-y-2 border-t border-gray-200">
-          <input data-news="${i}" data-key="id" value="${escAttr(n.id)}" placeholder="ID unik (slug)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
-          <input data-news="${i}" data-key="title" value="${escAttr(n.title)}" placeholder="Judul" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
-          <div class="grid grid-cols-2 gap-2">
-            <input data-news="${i}" data-key="category" value="${escAttr(n.category)}" placeholder="Kategori" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
-            <input data-news="${i}" data-key="date" type="date" value="${escAttr(n.date)}" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+        <div class="p-3 sm:p-4 space-y-2 border-t border-gray-200">
+          <input data-news="${i}" data-key="id" value="${escAttr(n.id)}" placeholder="ID unik (slug)" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <input data-news="${i}" data-key="title" value="${escAttr(n.title)}" placeholder="Judul" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input data-news="${i}" data-key="category" value="${escAttr(n.category)}" placeholder="Kategori" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+            <input data-news="${i}" data-key="date" type="date" value="${escAttr(n.date)}" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
           </div>
-          <input data-news="${i}" data-key="author" value="${escAttr(n.author)}" placeholder="Penulis" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
-          <div class="flex gap-2 items-center">
-            <input data-news="${i}" data-key="image" value="${escAttr(n.image)}" placeholder="URL Gambar" class="news-field flex-1 border border-gray-300 rounded px-2 py-1 text-sm">
-            <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-1.5 rounded hover:bg-brand-100 transition whitespace-nowrap">
+          <input data-news="${i}" data-key="author" value="${escAttr(n.author)}" placeholder="Penulis" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+            <input data-news="${i}" data-key="image" value="${escAttr(n.image)}" placeholder="URL Gambar" class="news-field flex-1 border border-gray-300 rounded px-2 py-1.5 text-sm">
+            <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-2 rounded hover:bg-brand-100 transition whitespace-nowrap text-center">
               📤 Upload
               <input type="file" accept="image/*" class="hidden" onchange="uploadNewsImage(event, ${i})">
             </label>
           </div>
-          <textarea data-news="${i}" data-key="excerpt" rows="2" placeholder="Ringkasan" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(n.excerpt)}</textarea>
-          <textarea data-news="${i}" data-key="content" rows="5" placeholder="Konten lengkap (HTML diperbolehkan)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm font-mono">${escHtml(n.content)}</textarea>
-          <div id="news-preview-${i}" class="hidden mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
+          <textarea data-news="${i}" data-key="excerpt" rows="2" placeholder="Ringkasan" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">${escHtml(n.excerpt)}</textarea>
+          <textarea data-news="${i}" data-key="content" rows="5" placeholder="Konten lengkap (HTML diperbolehkan)" class="news-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm font-mono">${escHtml(n.content)}</textarea>
+          <div id="news-preview-${i}" class="hidden mt-3 p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
         </div>
       </details>
     `).join('');
@@ -230,22 +254,19 @@
   window.toggleNewsPreview = function (i) {
     const panel = document.getElementById('news-preview-' + i);
     if (!panel) return;
-    if (!panel.classList.contains('hidden')) {
-      panel.classList.add('hidden');
-      return;
-    }
+    if (!panel.classList.contains('hidden')) { panel.classList.add('hidden'); return; }
     const n = currentData.news.items[i];
     if (!n) return;
     panel.innerHTML = `
       <div class="text-xs font-semibold text-gray-500 mb-2">PREVIEW</div>
       <article class="bg-white rounded-lg overflow-hidden border border-gray-200">
         <img src="${escAttr(n.image)}" alt="${escAttr(n.title)}" class="w-full aspect-video object-cover" onerror="this.style.display='none'">
-        <div class="p-4">
-          <div class="flex items-center gap-2 mb-2">
+        <div class="p-3 sm:p-4">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
             <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">${escHtml(n.category || 'Umum')}</span>
             <span class="text-xs text-gray-400">${escHtml(n.date || '')}</span>
           </div>
-          <h3 class="font-bold text-lg text-gray-800 mb-2">${escHtml(n.title || '(Judul)')}</h3>
+          <h3 class="font-bold text-base sm:text-lg text-gray-800 mb-2">${escHtml(n.title || '(Judul)')}</h3>
           <p class="text-sm text-gray-600 mb-3">${escHtml(n.excerpt || '(Ringkasan)')}</p>
           <div class="text-sm text-gray-700 leading-relaxed">${n.content || '<p>(Isi artikel)</p>'}</div>
         </div>
@@ -263,7 +284,7 @@
       currentData.news.items[i].image = result.url;
       const input = document.querySelector(`[data-news="${i}"][data-key="image"]`);
       if (input) input.value = result.url;
-      showToast('✓ Gambar berhasil di-upload ke GitHub!', 'success');
+      showToast('✓ Gambar berhasil di-upload!', 'success');
     } catch (err) {
       console.error('Upload error:', err);
       showToast('Upload gagal: ' + err.message, 'error');
@@ -287,7 +308,7 @@
     renderNews(); updateStats();
   };
 
-  /* GALLERY (with upload) */
+  /* ============ GALLERY ============ */
   function renderGallery() {
     const wrap = document.getElementById('gallery-editor');
     if (!wrap) return;
@@ -302,14 +323,14 @@
         <div class="aspect-video rounded bg-gray-100 mb-2 overflow-hidden">
           <img src="${escAttr(g.image)}" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'">
         </div>
-        <div class="flex gap-2 items-center mb-2">
-          <input data-gallery="${i}" data-key="image" value="${escAttr(g.image)}" placeholder="URL Gambar" class="gallery-field flex-1 border border-gray-300 rounded px-2 py-1 text-sm">
-          <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-1.5 rounded hover:bg-brand-100 transition whitespace-nowrap">
+        <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center mb-2">
+          <input data-gallery="${i}" data-key="image" value="${escAttr(g.image)}" placeholder="URL Gambar" class="gallery-field flex-1 border border-gray-300 rounded px-2 py-1.5 text-sm">
+          <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-2 rounded hover:bg-brand-100 transition whitespace-nowrap text-center">
             📤 Upload
             <input type="file" accept="image/*" class="hidden" onchange="uploadGalleryImage(event, ${i})">
           </label>
         </div>
-        <input data-gallery="${i}" data-key="caption" value="${escAttr(g.caption)}" placeholder="Caption" class="gallery-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+        <input data-gallery="${i}" data-key="caption" value="${escAttr(g.caption)}" placeholder="Caption" class="gallery-field w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
       </div>
     `).join('');
     wrap.querySelectorAll('.gallery-field').forEach(el => {
@@ -330,7 +351,7 @@
       currentData.gallery.items[i].image = result.url;
       const input = document.querySelector(`[data-gallery="${i}"][data-key="image"]`);
       if (input) input.value = result.url;
-      showToast('✓ Foto berhasil di-upload ke GitHub!', 'success');
+      showToast('✓ Foto berhasil di-upload!', 'success');
     } catch (err) {
       console.error('Upload error:', err);
       showToast('Upload gagal: ' + err.message, 'error');
@@ -353,7 +374,7 @@
     renderGallery(); updateStats();
   };
 
-  /* GITHUB TOKEN */
+  /* ============ GITHUB TOKEN ============ */
   window.saveGithubToken = function () {
     const input = document.getElementById('gh-token');
     const token = input?.value?.trim() || '';
@@ -385,11 +406,10 @@
     showToast('Token dihapus', 'success');
   };
 
-  /* SAVE ALL */
+  /* ============ SAVE ALL ============ */
   window.saveAll = function () {
     try {
       collectFields();
-
       const pillarEls = document.querySelectorAll('#pillars-editor [data-pillar-index]');
       if (pillarEls.length > 0) {
         const fresh = [];
@@ -403,7 +423,6 @@
         });
         currentData.sustainability.pillars = fresh.filter(Boolean);
       }
-
       const productEls = document.querySelectorAll('#products-editor [data-product-index]');
       if (productEls.length > 0) {
         const fresh = [];
@@ -417,7 +436,6 @@
         });
         currentData.products.items = fresh.filter(Boolean);
       }
-
       const newsEls = document.querySelectorAll('#news-editor details');
       if (newsEls.length > 0) {
         const fresh = [];
@@ -428,7 +446,86 @@
         });
         currentData.news.items = fresh;
       }
+      const galEls = document.querySelectorAll('#gallery-editor [data-gallery-index]');
+      if (galEls.length > 0) {
+        const fresh = [];
+        galEls.forEach(box => {
+          const obj = {};
+          box.querySelectorAll('.gallery-field').forEach(f => { obj[f.dataset.key] = f.value; });
+          if (obj.image) {
+            obj.id = obj.id || 'g' + Date.now() + Math.random().toString(36).slice(2, 6);
+            fresh.push(obj);
+          }
+        });
+        currentData.gallery.items = fresh;
+      }
+      const result = DataStore.save(currentData);
+      if (!result.ok) { showToast('Gagal menyimpan: ' + result.error, 'error'); return; }
+      currentData = result.data;
+      fillForm();
+      const statusEl = document.getElementById('save-status');
+      if (statusEl) {
+        statusEl.textContent = '✓ Tersimpan ' + new Date().toLocaleTimeString('id-ID');
+        statusEl.className = 'text-xs text-emerald-600 mr-2 font-medium';
+      }
+      showToast('✓ Perubahan berhasil disimpan!', 'success');
+    } catch (err) {
+      console.error('saveAll error:', err);
+      showToast('Error: ' + err.message, 'error');
+    }
+  };
 
+  /* ============ PUSH KE GITHUB ============ */
+  window.pushToGitHub = async function () {
+    const btn = document.getElementById('btn-push');
+    const status = document.getElementById('push-status');
+    const cfg = GitHubDataPusher.getConfig();
+
+    if (!GitHubUploader.getToken()) {
+      showToast('Token GitHub belum diisi. Buka Pengaturan Situs.', 'error');
+      if (status) { status.textContent = '✗ Token belum diisi.'; status.className = 'mt-3 text-sm text-red-600'; }
+      return;
+    }
+    if (!confirm('Push konten saat ini ke GitHub?\n\nFile js/data.js di repo akan ditimpa. GitHub Pages akan rebuild 1–2 menit.')) return;
+
+    try {
+      collectFields();
+      const pillarEls = document.querySelectorAll('#pillars-editor [data-pillar-index]');
+      if (pillarEls.length > 0) {
+        const fresh = [];
+        pillarEls.forEach(box => {
+          const idx = +box.dataset.pillarIndex;
+          fresh[idx] = {
+            icon: box.querySelector('[data-key="icon"]').value,
+            name: box.querySelector('[data-key="name"]').value,
+            desc: box.querySelector('[data-key="desc"]').value
+          };
+        });
+        currentData.sustainability.pillars = fresh.filter(Boolean);
+      }
+      const productEls = document.querySelectorAll('#products-editor [data-product-index]');
+      if (productEls.length > 0) {
+        const fresh = [];
+        productEls.forEach(box => {
+          const idx = +box.dataset.productIndex;
+          fresh[idx] = {
+            icon: box.querySelector('[data-key="icon"]').value,
+            name: box.querySelector('[data-key="name"]').value,
+            desc: box.querySelector('[data-key="desc"]').value
+          };
+        });
+        currentData.products.items = fresh.filter(Boolean);
+      }
+      const newsEls = document.querySelectorAll('#news-editor details');
+      if (newsEls.length > 0) {
+        const fresh = [];
+        newsEls.forEach(detail => {
+          const obj = {};
+          detail.querySelectorAll('.news-field').forEach(f => { obj[f.dataset.key] = f.value; });
+          if (obj.id || obj.title) fresh.push(obj);
+        });
+        currentData.news.items = fresh;
+      }
       const galEls = document.querySelectorAll('#gallery-editor [data-gallery-index]');
       if (galEls.length > 0) {
         const fresh = [];
@@ -443,27 +540,34 @@
         currentData.gallery.items = fresh;
       }
 
-      const result = DataStore.save(currentData);
-      if (!result.ok) {
-        showToast('Gagal menyimpan: ' + result.error, 'error');
-        return;
+      DataStore.save(currentData);
+      if (btn) { btn.disabled = true; btn.classList.add('opacity-60', 'cursor-not-allowed'); }
+      if (status) { status.textContent = '⏳ Mengambil SHA file...'; status.className = 'mt-3 text-sm text-amber-600'; }
+
+      const commitMsg = 'chore(cms): update content ' + new Date().toISOString();
+      const result = await GitHubDataPusher.pushData(currentData, commitMsg);
+
+      if (status) {
+        status.innerHTML = `✓ Berhasil di-push!<br><a href="${result.url}" target="_blank" class="text-brand-700 underline">Lihat file di GitHub</a> — commit <code class="bg-gray-100 px-1 rounded">${(result.commit || '').slice(0, 7)}</code><br><span class="text-gray-500">Tunggu 1–2 menit untuk GitHub Pages rebuild.</span>`;
+        status.className = 'mt-3 text-sm text-emerald-700';
       }
-      currentData = result.data;
-      fillForm();
+      showToast('✓ Berhasil di-push ke GitHub!', 'success');
 
       const statusEl = document.getElementById('save-status');
       if (statusEl) {
-        statusEl.textContent = '✓ Tersimpan ' + new Date().toLocaleTimeString('id-ID');
+        statusEl.textContent = '✓ Di-push ' + new Date().toLocaleTimeString('id-ID');
         statusEl.className = 'text-xs text-emerald-600 mr-2 font-medium';
       }
-      showToast('✓ Perubahan berhasil disimpan!', 'success');
     } catch (err) {
-      console.error('saveAll error:', err);
-      showToast('Error: ' + err.message, 'error');
+      console.error('pushToGitHub error:', err);
+      if (status) { status.textContent = '✗ Gagal: ' + err.message; status.className = 'mt-3 text-sm text-red-600'; }
+      showToast('Push gagal: ' + err.message, 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.classList.remove('opacity-60', 'cursor-not-allowed'); }
     }
   };
 
-  /* EXPORT / IMPORT / RESET */
+  /* ============ EXPORT / IMPORT / RESET ============ */
   window.exportData = function () {
     try {
       collectFields();
@@ -514,11 +618,12 @@
     showToast('✓ Data direset ke default', 'success');
   };
 
-  /* INIT */
+  /* ============ INIT ============ */
   function init() {
     currentData = DataStore.get();
     fillForm();
     console.log('[CMS] Ready.');
+    if (window.innerWidth < 1024) closeSidebar();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
