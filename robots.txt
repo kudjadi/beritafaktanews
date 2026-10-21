@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 
-Sitemap: https://izwonomansyur-crypto.github.io/webjm/sitemap.xml
+Sitemap: https://kudjadi.github.io/beritafaktanews/sitemap.xml
