@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CMS Admin - Prime Agri Resources</title>
+  <title>CMS Admin - KPKS Jadi Mandiri</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -53,7 +53,7 @@
         Dashboard
       </a>
 
-      <p class="px-6 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Konten Landing Page</p>
+      <p class="px-6 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Konten</p>
       <a href="#" onclick="switchTab('hero', this); return false;" class="sidebar-link flex items-center px-6 py-3 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         Hero Section
@@ -92,8 +92,6 @@
         <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
         Pengaturan Situs
       </a>
-
-      <p class="px-6 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Backup</p>
       <a href="#" onclick="switchTab('backup', this); return false;" class="sidebar-link flex items-center px-6 py-3 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-800 transition border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
         Import / Export
@@ -141,11 +139,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p class="text-xs text-gray-400 uppercase tracking-wider">Produk</p>
-            <p class="text-2xl font-bold text-gray-800 mt-1" id="stat-products">2</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1" id="stat-products">0</p>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p class="text-xs text-gray-400 uppercase tracking-wider">Pilar</p>
-            <p class="text-2xl font-bold text-gray-800 mt-1" id="stat-pillars">4</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1" id="stat-pillars">0</p>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p class="text-xs text-gray-400 uppercase tracking-wider">Artikel</p>
@@ -161,9 +159,9 @@
           <h3 class="font-semibold text-gray-800 mb-4">Cara Kerja CMS</h3>
           <ol class="list-decimal list-inside space-y-2 text-sm text-gray-600">
             <li>Data disimpan di <code class="bg-gray-100 px-1 rounded">localStorage</code> browser Anda.</li>
-            <li>Setiap perubahan langsung terlihat di <a href="index.html" class="text-brand-700 hover:underline">landing page</a> (refresh halaman).</li>
+            <li>Atur token GitHub di <a href="#" onclick="switchTab('settings', document.querySelector('[onclick*=settings]')); return false;" class="text-brand-700 hover:underline font-semibold">Pengaturan Situs</a> untuk upload gambar.</li>
             <li>Gunakan menu <b>Import/Export</b> untuk backup konten.</li>
-            <li>Untuk deploy ke GitHub Pages, konten default ada di <code class="bg-gray-100 px-1 rounded">js/data.js</code>.</li>
+            <li>Setiap perubahan langsung terlihat di <a href="index.html" class="text-brand-700 hover:underline">landing page</a>.</li>
           </ol>
         </div>
       </div>
@@ -182,9 +180,7 @@
             </div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar Background</label><input data-field="hero.image" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -199,9 +195,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Paragraf 2</label><textarea data-field="about.para2" rows="3" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Kutipan</label><textarea data-field="about.quote" rows="3" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -217,9 +211,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar</label><input data-field="fundamentals.image" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Poin-poin (1 per baris)</label><textarea data-field="fundamentals.items" data-type="array" rows="4" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -240,9 +232,7 @@
             </div>
             <div id="pillars-editor" class="space-y-3"></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -262,9 +252,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label><textarea data-field="products.desc" rows="2" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
             <div id="products-editor" class="space-y-3"></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -284,9 +272,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label><textarea data-field="news.desc" rows="2" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
           </div>
           <div id="news-editor" class="space-y-3"></div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -306,9 +292,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label><textarea data-field="gallery.desc" rows="2" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
           </div>
           <div id="gallery-editor" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
@@ -326,13 +310,11 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label><input data-field="footer.address" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Copyright</label><input data-field="footer.copyright" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
-          </div>
+          <div class="mt-6 flex justify-end"><button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button></div>
         </div>
       </div>
 
-      <!-- SETTINGS -->
+      <!-- SETTINGS (Site + GitHub Token) -->
       <div id="tab-settings" class="tab-content">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-2xl">
           <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="w-1 h-5 bg-brand-600 rounded"></span>Pengaturan Situs</h3>
@@ -341,9 +323,49 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label><textarea data-field="site.metaDescription" rows="2" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></textarea></div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">Favicon (1 huruf)</label><input data-field="site.favicon" type="text" maxlength="2" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
           </div>
-          <div class="mt-6 flex justify-end">
-            <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan</button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-2xl mt-6">
+          <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="w-1 h-5 bg-brand-600 rounded"></span>
+            <span>GitHub Upload</span>
+          </h3>
+          <p class="text-sm text-gray-500 mb-4">Upload gambar langsung ke repo GitHub. Token disimpan di <code class="bg-gray-100 px-1 rounded">localStorage</code> browser Anda.</p>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 text-sm text-amber-800">
+            <strong>⚠️ Cara membuat token:</strong>
+            <ol class="list-decimal list-inside mt-2 space-y-1">
+              <li>Buka <a href="https://github.com/settings/tokens?type=beta" target="_blank" class="text-brand-700 underline font-medium">GitHub → Settings → Tokens (Fine-grained)</a>.</li>
+              <li>Buat token dengan <strong>Contents: Read and Write</strong> ke repo <code>beritafaktanews</code>.</li>
+              <li>Copy token → paste di bawah.</li>
+            </ol>
           </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div><label class="block text-sm font-medium text-gray-700 mb-1">Owner</label><input data-field="github.owner" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-1">Repo</label><input data-field="github.repo" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div><label class="block text-sm font-medium text-gray-700 mb-1">Branch</label><input data-field="github.branch" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-1">Folder Upload</label><input data-field="github.uploadPath" type="text" class="field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Personal Access Token</label>
+              <input id="gh-token" type="password" placeholder="github_pat_..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono">
+              <p class="text-xs text-gray-400 mt-1">Disimpan di localStorage, tidak di-commit. Kosongkan jika tidak ingin upload.</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+              <button onclick="saveGithubToken()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan Token</button>
+              <button onclick="testGithubToken()" class="border border-brand-700 text-brand-700 hover:bg-brand-50 text-sm font-medium px-5 py-2 rounded-lg transition">Test Token</button>
+              <button onclick="clearGithubToken()" class="border border-red-300 text-red-600 hover:bg-red-50 text-sm font-medium px-5 py-2 rounded-lg transition">Hapus Token</button>
+            </div>
+            <div id="gh-status" class="text-sm text-gray-500"></div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end max-w-2xl">
+          <button onclick="saveAll()" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition">Simpan Semua Pengaturan</button>
         </div>
       </div>
 

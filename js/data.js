@@ -1,16 +1,22 @@
 /* =========================================================
-   DATA STORE — Prime Agri Resources
+   DATA STORE — KPKS Jadi Mandiri
    ========================================================= */
 
 const DEFAULT_DATA = {
   site: {
-    title: "Prime Agri Resources",
-    metaDescription: "PT Prime Agri Resources Tbk. - Agribisnis terintegrasi yang berkelanjutan.",
+    title: "KPKS Jadi Mandiri",
+    metaDescription: "PT KPKS Jadi Mandiri Tbk. - Agribisnis terintegrasi yang berkelanjutan.",
     favicon: "P",
     themeColor: "#194637"
   },
+  github: {
+    owner: "kudjadi",
+    repo: "beritafaktanews",
+    branch: "main",
+    uploadPath: "uploads"
+  },
   hero: {
-    label: "PT Prime Agri Resources Tbk",
+    label: "PT KPKS Jadi Mandiri Tbk",
     title: "Membangun Fundamental Bisnis yang Berkelanjutan",
     desc: "Mengelola sumber daya alam terbarukan dengan tata kelola terbaik, sumber daya manusia yang berkomitmen pada keunggulan, serta kepatuhan terhadap standar nasional dan internasional.",
     btn1: "Pelajari Lebih Lanjut",
@@ -19,15 +25,15 @@ const DEFAULT_DATA = {
   },
   about: {
     subtitle: "Company Profile",
-    title: "Tentang Prime Agri Resources",
-    para1: "PT Prime Agri Resources (sebelumnya PT Sampoerna Agro Tbk.) terdaftar di Bursa Efek Indonesia. Kami adalah perusahaan agribisnis terintegrasi yang berfokus pada pengelolaan sumber daya alam secara bertanggung jawab dan berkelanjutan.",
+    title: "Tentang KPKS Jadi Mandiri",
+    para1: "PT KPKS Jadi Mandiri (sebelumnya PT Sampoerna Agro Tbk.) terdaftar di Bursa Efek Indonesia. Kami adalah perusahaan agribisnis terintegrasi yang berfokus pada pengelolaan sumber daya alam secara bertanggung jawab dan berkelanjutan.",
     para2: "Dengan pengalaman sejak penanaman pertama pada tahun 1989, aset perkebunan kami memiliki nilai keberlanjutan yang tinggi, berkembang menjadi usaha agribisnis terintegrasi dan terdiversifikasi dalam empat komoditas utama: minyak kelapa sawit, inti sawit, dan benih.",
     quote: "Fokus pada upaya memperkuat fundamental bisnis melalui praktik pertanian yang baik dan bertanggung jawab, mulai dari perlindungan kawasan bernilai konservasi tinggi, penggunaan pupuk organik, pengendalian hama biologis, hingga daur ulang limbah menjadi energi."
   },
   fundamentals: {
     subtitle: "Fundamental Bisnis",
     title: "Building the Fundamentals",
-    para1: "Prime Agri Resources terus fokus pada upaya memperkuat fundamental bisnis. Kini, perusahaan terdiri dari sumber daya alam terbarukan yang dikelola dengan baik, sumber daya manusia yang berkomitmen pada keunggulan, dan kepatuhan terhadap hukum yang berlaku serta persyaratan standar nasional dan internasional.",
+    para1: "KPKS Jadi Mandiri terus fokus pada upaya memperkuat fundamental bisnis. Kini, perusahaan terdiri dari sumber daya alam terbarukan yang dikelola dengan baik, sumber daya manusia yang berkomitmen pada keunggulan, dan kepatuhan terhadap hukum yang berlaku serta persyaratan standar nasional dan internasional.",
     para2: "Praktik pertanian yang baik dan bertanggung jawab menciptakan keberlanjutan: mulai dari kawasan bernilai konservasi tinggi yang dilindungi, penggunaan pupuk organik, agen pengendalian hama biologis, penggunaan air secara bijak, daur ulang limbah perkebunan menjadi sumber energi, hingga sifat alami tanaman itu sendiri yang dapat ditanam ulang.",
     image: "https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=1974&auto=format&fit=crop",
     items: [
@@ -66,7 +72,7 @@ const DEFAULT_DATA = {
         id: "prime-agri-raih-sertifikasi-ispo-2026",
         title: "Prime Agri Raih Sertifikasi ISPO 2026",
         excerpt: "Perusahaan berhasil mempertahankan sertifikasi Indonesian Sustainable Palm Oil untuk seluruh unit perkebunan.",
-        content: "<p>PT Prime Agri Resources Tbk. kembali meraih sertifikasi Indonesian Sustainable Palm Oil (ISPO) untuk tahun 2026. Sertifikasi ini mencakup seluruh unit perkebunan dan pabrik kelapa sawit perusahaan.</p><p>Direktur Utama menyampaikan bahwa pencapaian ini merupakan hasil kerja keras seluruh tim dalam menerapkan praktik perkebunan berkelanjutan sesuai standar nasional dan internasional.</p><p>Ke depan, perusahaan akan terus berkomitmen meningkatkan kualitas pengelolaan perkebunan dan kesejahteraan masyarakat sekitar.</p>",
+        content: "<p>PT KPKS Jadi Mandiri Tbk. kembali meraih sertifikasi Indonesian Sustainable Palm Oil (ISPO) untuk tahun 2026. Sertifikasi ini mencakup seluruh unit perkebunan dan pabrik kelapa sawit perusahaan.</p><p>Direktur Utama menyampaikan bahwa pencapaian ini merupakan hasil kerja keras seluruh tim dalam menerapkan praktik perkebunan berkelanjutan sesuai standar nasional dan internasional.</p><p>Ke depan, perusahaan akan terus berkomitmen meningkatkan kualitas pengelolaan perkebunan dan kesejahteraan masyarakat sekitar.</p>",
         image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=1200&auto=format&fit=crop",
         date: "2026-03-15",
         author: "Tim Komunikasi",
@@ -77,7 +83,7 @@ const DEFAULT_DATA = {
         id: "program-pemberdayaan-petani-mitra-2026",
         title: "Program Pemberdayaan Petani Mitra Diperluas",
         excerpt: "Prime Agri memperluas program kemitraan dengan petani swadaya di Sumatera dan Kalimantan.",
-        content: "<p>Prime Agri Resources memperluas program pemberdayaan petani mitra ke wilayah Sumatera dan Kalimantan. Program ini mencakup pelatihan budidaya, akses pupuk organik, dan pendampingan pascapanen.</p><p>Sejak dimulai, program telah melibatkan lebih dari 500 petani swadaya dengan peningkatan hasil panen rata-rata 20%.</p>",
+        content: "<p>KPKS Jadi Mandiri memperluas program pemberdayaan petani mitra ke wilayah Sumatera dan Kalimantan. Program ini mencakup pelatihan budidaya, akses pupuk organik, dan pendampingan pascapanen.</p><p>Sejak dimulai, program telah melibatkan lebih dari 500 petani swadaya dengan peningkatan hasil panen rata-rata 20%.</p>",
         image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1200&auto=format&fit=crop",
         date: "2026-02-20",
         author: "Divisi CSR",
@@ -111,12 +117,12 @@ const DEFAULT_DATA = {
     ]
   },
   footer: {
-    companyName: "PT Prime Agri Resources Tbk",
+    companyName: "PT KPKS Jadi Mandiri Tbk",
     tagline: "Agribisnis terintegrasi yang berkelanjutan.",
     email: "info@primeagri.co.id",
     phone: "+62 21 1234 5678",
     address: "Jakarta, Indonesia",
-    copyright: "© 2026 PT Prime Agri Resources Tbk. All rights reserved."
+    copyright: "© 2026 PT KPKS Jadi Mandiri Tbk. All rights reserved."
   }
 };
 
@@ -192,6 +198,85 @@ const DataStore = {
   }
 };
 
+/* =========================================================
+   GITHUB UPLOADER
+   ========================================================= */
+const GitHubUploader = {
+  getConfig() {
+    const cfg = DataStore.get().github || {};
+    const token = localStorage.getItem('prime_agri_gh_token') || '';
+    return {
+      owner: cfg.owner || 'kudjadi',
+      repo: cfg.repo || 'beritafaktanews',
+      branch: cfg.branch || 'main',
+      path: cfg.uploadPath || 'uploads',
+      token
+    };
+  },
+  setToken(token) {
+    if (token) localStorage.setItem('prime_agri_gh_token', token);
+    else localStorage.removeItem('prime_agri_gh_token');
+  },
+  getToken() {
+    return localStorage.getItem('prime_agri_gh_token') || '';
+  },
+  async testToken() {
+    const { token } = this.getConfig();
+    if (!token) return { ok: false, error: 'Token belum diisi' };
+    try {
+      const res = await fetch('https://api.github.com/user', {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+      });
+      if (!res.ok) return { ok: false, error: `HTTP ${res.status}` };
+      const u = await res.json();
+      return { ok: true, user: u.login };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  },
+  async upload(file, onProgress) {
+    const { owner, repo, branch, path, token } = this.getConfig();
+    if (!token) throw new Error('Token GitHub belum diisi. Buka Pengaturan Situs → GitHub Upload.');
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const filename = `${path}/${Date.now()}-${safeName}`;
+
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    if (onProgress) onProgress(30);
+
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filename}`;
+    const body = { message: `upload: ${safeName}`, content: base64, branch };
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (onProgress) onProgress(80);
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+
+    if (onProgress) onProgress(100);
+    const publicUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filename}`;
+    return { url: publicUrl, path: filename };
+  }
+};
+
 window.DEFAULT_DATA = DEFAULT_DATA;
 window.DataStore = DataStore;
+window.GitHubUploader = GitHubUploader;
 window.deepClone = deepClone;

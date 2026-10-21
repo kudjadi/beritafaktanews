@@ -38,7 +38,6 @@
       return;
     }
 
-    /* SEO */
     document.title = article.title + ' — ' + d.site.title;
     const setMeta = (id, val) => {
       const el = document.getElementById(id);
@@ -52,7 +51,6 @@
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', article.excerpt);
 
-    /* Render */
     const catEl = document.getElementById('art-category');
     if (catEl) catEl.textContent = article.category;
     const dateEl = document.getElementById('art-date');
@@ -69,7 +67,6 @@
     const body = document.getElementById('art-body');
     if (body) body.innerHTML = article.content || `<p>${escHtml(article.excerpt)}</p>`;
 
-    /* JSON-LD */
     const ld = document.createElement('script');
     ld.type = 'application/ld+json';
     ld.textContent = JSON.stringify({

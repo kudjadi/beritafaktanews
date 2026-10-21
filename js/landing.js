@@ -20,7 +20,6 @@
   function render() {
     const d = DataStore.get();
 
-    /* ---------- SITE ---------- */
     document.title = d.site.title;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', d.site.metaDescription);
@@ -29,7 +28,7 @@
     if (navLogo) navLogo.textContent = d.site.favicon || 'P';
     if (navTitle) navTitle.textContent = d.site.title.toUpperCase();
 
-    /* ---------- HERO ---------- */
+    /* HERO */
     setText('hero-label', d.hero.label);
     setText('hero-title', d.hero.title);
     setText('hero-desc', d.hero.desc);
@@ -42,14 +41,14 @@
       heroBg.style.backgroundPosition = 'center 30%';
     }
 
-    /* ---------- ABOUT ---------- */
+    /* ABOUT */
     setText('about-subtitle', d.about.subtitle);
     setText('about-title', d.about.title);
     setText('about-para1', d.about.para1);
     setText('about-para2', d.about.para2);
     setText('about-quote', d.about.quote);
 
-    /* ---------- SUSTAINABILITY ---------- */
+    /* SUSTAINABILITY */
     setText('sus-subtitle', d.sustainability.subtitle);
     setText('sus-title', d.sustainability.title);
     setText('sus-desc', d.sustainability.desc);
@@ -64,7 +63,7 @@
       `).join('');
     }
 
-    /* ---------- FUNDAMENTALS ---------- */
+    /* FUNDAMENTALS */
     setText('fund-subtitle', d.fundamentals.subtitle);
     setText('fund-title', d.fundamentals.title);
     setText('fund-para1', d.fundamentals.para1);
@@ -81,7 +80,7 @@
       `).join('');
     }
 
-    /* ---------- PRODUCTS ---------- */
+    /* PRODUCTS */
     setText('prod-subtitle', d.products.subtitle);
     setText('prod-title', d.products.title);
     setText('prod-desc', d.products.desc);
@@ -98,7 +97,7 @@
       `).join('');
     }
 
-    /* ---------- NEWS ---------- */
+    /* NEWS */
     setText('news-subtitle', d.news?.subtitle);
     setText('news-title', d.news?.title);
     setText('news-desc', d.news?.desc);
@@ -128,25 +127,35 @@
       `).join('');
     }
 
-    /* ---------- GALLERY ---------- */
+    /* GALLERY CAROUSEL */
     setText('gallery-subtitle', d.gallery?.subtitle);
     setText('gallery-title', d.gallery?.title);
     setText('gallery-desc', d.gallery?.desc);
-    const galleryGrid = document.getElementById('gallery-grid');
-    if (galleryGrid) {
+    const track = document.getElementById('gallery-track');
+    const dots = document.getElementById('gallery-dots');
+    if (track) {
       const items = d.gallery?.items || [];
       window.__galleryItems = items;
-      galleryGrid.innerHTML = items.map((g, i) => `
-        <button onclick="openLightbox(${i})" class="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" aria-label="${escAttr(g.caption)}">
-          <img src="${escAttr(g.image)}" alt="${escAttr(g.caption)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-            <span class="text-white text-xs font-medium line-clamp-2 text-left">${esc(g.caption)}</span>
-          </div>
-        </button>
+      track.innerHTML = items.map((g, i) => `
+        <div class="snap-center shrink-0 w-[85%] sm:w-[45%] lg:w-[32%] xl:w-[24%]" data-slide="${i}">
+          <button onclick="openLightbox(${i})" class="group block relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100 w-full">
+            <img src="${escAttr(g.image)}" alt="${escAttr(g.caption)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-4">
+              <span class="text-white text-sm font-medium text-left line-clamp-2">${esc(g.caption)}</span>
+            </div>
+          </button>
+        </div>
       `).join('');
+      if (dots) {
+        dots.innerHTML = items.map((_, i) => `
+          <button onclick="goToSlide(${i})" class="w-2.5 h-2.5 rounded-full bg-emerald-200 hover:bg-emerald-400 transition" data-dot="${i}" aria-label="Slide ${i+1}"></button>
+        `).join('');
+        setTimeout(updateDots, 100);
+      }
+      track.addEventListener('scroll', updateDots);
     }
 
-    /* ---------- FOOTER ---------- */
+    /* FOOTER */
     const footDesc = document.getElementById('foot-desc');
     if (footDesc) footDesc.innerHTML = `${esc(d.footer.companyName)}<br>${esc(d.footer.tagline)}`;
     setText('foot-address', d.footer.address);
@@ -155,7 +164,7 @@
     setText('foot-phone', d.footer.phone);
     setText('foot-copy', d.footer.copyright);
 
-    /* ---------- DYNAMIC SEO ---------- */
+    /* SEO */
     const ogTitle = document.getElementById('og-title');
     if (ogTitle) ogTitle.setAttribute('content', d.site.title + ' — ' + d.hero.title);
     const ogDesc = document.getElementById('og-desc');
@@ -181,7 +190,49 @@
     if (el) el.textContent = value ?? '';
   }
 
-  /* ---------- LIGHTBOX ---------- */
+  /* CAROUSEL */
+  window.prevSlide = function () {
+    const track = document.getElementById('gallery-track');
+    if (!track) return;
+    const first = track.querySelector('[data-slide]');
+    if (!first) return;
+    const w = first.offsetWidth + 16;
+    track.scrollBy({ left: -w, behavior: 'smooth' });
+  };
+  window.nextSlide = function () {
+    const track = document.getElementById('gallery-track');
+    if (!track) return;
+    const first = track.querySelector('[data-slide]');
+    if (!first) return;
+    const w = first.offsetWidth + 16;
+    track.scrollBy({ left: w, behavior: 'smooth' });
+  };
+  window.goToSlide = function (i) {
+    const track = document.getElementById('gallery-track');
+    if (!track) return;
+    const target = track.querySelector(`[data-slide="${i}"]`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  };
+  function updateDots() {
+    const track = document.getElementById('gallery-track');
+    if (!track) return;
+    const slides = Array.from(track.querySelectorAll('[data-slide]'));
+    if (!slides.length) return;
+    const trackCenter = track.scrollLeft + track.offsetWidth / 2;
+    let active = 0;
+    let minDist = Infinity;
+    slides.forEach((s, i) => {
+      const slideCenter = s.offsetLeft + s.offsetWidth / 2;
+      const dist = Math.abs(trackCenter - slideCenter);
+      if (dist < minDist) { minDist = dist; active = i; }
+    });
+    document.querySelectorAll('[data-dot]').forEach((dot, i) => {
+      dot.classList.toggle('bg-emerald-600', i === active);
+      dot.classList.toggle('bg-emerald-200', i !== active);
+    });
+  }
+
+  /* LIGHTBOX */
   let lbIndex = 0;
   window.openLightbox = function (i) {
     lbIndex = i;
@@ -224,7 +275,7 @@
     if (e.key === 'ArrowRight') nextLightbox();
   });
 
-  /* ---------- INIT ---------- */
+  /* INIT */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render);
   } else {

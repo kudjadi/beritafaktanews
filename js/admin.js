@@ -7,7 +7,6 @@
 
   let currentData = DataStore.get();
 
-  /* ---------- TAB SWITCH ---------- */
   const pageTitles = {
     dashboard:    { title: 'Dashboard',            subtitle: 'Ringkasan dan pengaturan konten landing page' },
     hero:         { title: 'Hero Section',         subtitle: 'Atur konten bagian hero di landing page' },
@@ -18,7 +17,7 @@
     news:         { title: 'Berita / Artikel',     subtitle: 'Kelola artikel dan berita perusahaan' },
     gallery:      { title: 'Galeri Foto',          subtitle: 'Kelola foto kegiatan' },
     footer:       { title: 'Footer & Kontak',      subtitle: 'Atur informasi kontak dan footer' },
-    settings:     { title: 'Pengaturan Situs',     subtitle: 'Konfigurasi umum situs' },
+    settings:     { title: 'Pengaturan Situs',     subtitle: 'Konfigurasi situs & GitHub upload' },
     backup:       { title: 'Import / Export',      subtitle: 'Backup dan restore data konten' }
   };
 
@@ -35,7 +34,7 @@
     if (sEl) sEl.textContent = info.subtitle;
   };
 
-  /* ---------- TOAST ---------- */
+  /* TOAST */
   function showToast(message, type) {
     const toast = document.getElementById('toast');
     const msgEl = document.getElementById('toast-message');
@@ -52,7 +51,7 @@
   }
   window.showToast = showToast;
 
-  /* ---------- HELPERS ---------- */
+  /* HELPERS */
   function getByPath(obj, path) {
     return path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
   }
@@ -72,7 +71,7 @@
     return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   }
 
-  /* ---------- FILL FORM ---------- */
+  /* FILL FORM */
   function fillForm() {
     document.querySelectorAll('.field').forEach(el => {
       const path = el.dataset.field;
@@ -84,6 +83,8 @@
         el.value = (val !== undefined && val !== null) ? val : '';
       }
     });
+    const ghToken = document.getElementById('gh-token');
+    if (ghToken) ghToken.value = GitHubUploader.getToken();
     renderPillars();
     renderProducts();
     renderNews();
@@ -109,7 +110,7 @@
     });
   }
 
-  /* ---------- PILLARS ---------- */
+  /* PILLARS */
   function renderPillars() {
     const wrap = document.getElementById('pillars-editor');
     if (!wrap) return;
@@ -145,7 +146,7 @@
     renderPillars(); updateStats();
   };
 
-  /* ---------- PRODUCTS ---------- */
+  /* PRODUCTS */
   function renderProducts() {
     const wrap = document.getElementById('products-editor');
     if (!wrap) return;
@@ -181,7 +182,7 @@
     renderProducts(); updateStats();
   };
 
-  /* ---------- NEWS ---------- */
+  /* NEWS (with live preview + upload) */
   function renderNews() {
     const wrap = document.getElementById('news-editor');
     if (!wrap) return;
@@ -191,7 +192,10 @@
       <details class="border border-gray-200 rounded-lg" ${i === 0 ? 'open' : ''}>
         <summary class="cursor-pointer px-4 py-3 flex items-center justify-between hover:bg-gray-50">
           <span class="text-sm font-medium text-gray-800 truncate">📰 ${escHtml(n.title || 'Artikel Baru')}</span>
-          <button type="button" onclick="event.preventDefault(); removeNews(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="event.preventDefault(); toggleNewsPreview(${i})" class="text-brand-600 hover:text-brand-800 text-xs font-medium">👁 Preview</button>
+            <button type="button" onclick="event.preventDefault(); removeNews(${i})" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+          </div>
         </summary>
         <div class="p-4 space-y-2 border-t border-gray-200">
           <input data-news="${i}" data-key="id" value="${escAttr(n.id)}" placeholder="ID unik (slug)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
@@ -201,9 +205,16 @@
             <input data-news="${i}" data-key="date" type="date" value="${escAttr(n.date)}" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
           </div>
           <input data-news="${i}" data-key="author" value="${escAttr(n.author)}" placeholder="Penulis" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
-          <input data-news="${i}" data-key="image" value="${escAttr(n.image)}" placeholder="URL Gambar" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
+          <div class="flex gap-2 items-center">
+            <input data-news="${i}" data-key="image" value="${escAttr(n.image)}" placeholder="URL Gambar" class="news-field flex-1 border border-gray-300 rounded px-2 py-1 text-sm">
+            <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-1.5 rounded hover:bg-brand-100 transition whitespace-nowrap">
+              📤 Upload
+              <input type="file" accept="image/*" class="hidden" onchange="uploadNewsImage(event, ${i})">
+            </label>
+          </div>
           <textarea data-news="${i}" data-key="excerpt" rows="2" placeholder="Ringkasan" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm">${escHtml(n.excerpt)}</textarea>
-          <textarea data-news="${i}" data-key="content" rows="4" placeholder="Konten lengkap (HTML diperbolehkan)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm font-mono">${escHtml(n.content)}</textarea>
+          <textarea data-news="${i}" data-key="content" rows="5" placeholder="Konten lengkap (HTML diperbolehkan)" class="news-field w-full border border-gray-300 rounded px-2 py-1 text-sm font-mono">${escHtml(n.content)}</textarea>
+          <div id="news-preview-${i}" class="hidden mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
         </div>
       </details>
     `).join('');
@@ -215,6 +226,52 @@
       });
     });
   }
+
+  window.toggleNewsPreview = function (i) {
+    const panel = document.getElementById('news-preview-' + i);
+    if (!panel) return;
+    if (!panel.classList.contains('hidden')) {
+      panel.classList.add('hidden');
+      return;
+    }
+    const n = currentData.news.items[i];
+    if (!n) return;
+    panel.innerHTML = `
+      <div class="text-xs font-semibold text-gray-500 mb-2">PREVIEW</div>
+      <article class="bg-white rounded-lg overflow-hidden border border-gray-200">
+        <img src="${escAttr(n.image)}" alt="${escAttr(n.title)}" class="w-full aspect-video object-cover" onerror="this.style.display='none'">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">${escHtml(n.category || 'Umum')}</span>
+            <span class="text-xs text-gray-400">${escHtml(n.date || '')}</span>
+          </div>
+          <h3 class="font-bold text-lg text-gray-800 mb-2">${escHtml(n.title || '(Judul)')}</h3>
+          <p class="text-sm text-gray-600 mb-3">${escHtml(n.excerpt || '(Ringkasan)')}</p>
+          <div class="text-sm text-gray-700 leading-relaxed">${n.content || '<p>(Isi artikel)</p>'}</div>
+        </div>
+      </article>
+    `;
+    panel.classList.remove('hidden');
+  };
+
+  window.uploadNewsImage = async function (event, i) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      showToast('Mengunggah ke GitHub...', 'info');
+      const result = await GitHubUploader.upload(file);
+      currentData.news.items[i].image = result.url;
+      const input = document.querySelector(`[data-news="${i}"][data-key="image"]`);
+      if (input) input.value = result.url;
+      showToast('✓ Gambar berhasil di-upload ke GitHub!', 'success');
+    } catch (err) {
+      console.error('Upload error:', err);
+      showToast('Upload gagal: ' + err.message, 'error');
+    } finally {
+      event.target.value = '';
+    }
+  };
+
   window.removeNews = function (i) {
     if (!confirm('Hapus artikel ini?')) return;
     currentData.news.items.splice(i, 1);
@@ -230,7 +287,7 @@
     renderNews(); updateStats();
   };
 
-  /* ---------- GALLERY ---------- */
+  /* GALLERY (with upload) */
   function renderGallery() {
     const wrap = document.getElementById('gallery-editor');
     if (!wrap) return;
@@ -245,7 +302,13 @@
         <div class="aspect-video rounded bg-gray-100 mb-2 overflow-hidden">
           <img src="${escAttr(g.image)}" alt="" class="w-full h-full object-cover" onerror="this.style.display='none'">
         </div>
-        <input data-gallery="${i}" data-key="image" value="${escAttr(g.image)}" placeholder="URL Gambar" class="gallery-field w-full border border-gray-300 rounded px-2 py-1 text-sm mb-2">
+        <div class="flex gap-2 items-center mb-2">
+          <input data-gallery="${i}" data-key="image" value="${escAttr(g.image)}" placeholder="URL Gambar" class="gallery-field flex-1 border border-gray-300 rounded px-2 py-1 text-sm">
+          <label class="cursor-pointer bg-brand-50 text-brand-700 border border-brand-200 text-xs font-medium px-3 py-1.5 rounded hover:bg-brand-100 transition whitespace-nowrap">
+            📤 Upload
+            <input type="file" accept="image/*" class="hidden" onchange="uploadGalleryImage(event, ${i})">
+          </label>
+        </div>
         <input data-gallery="${i}" data-key="caption" value="${escAttr(g.caption)}" placeholder="Caption" class="gallery-field w-full border border-gray-300 rounded px-2 py-1 text-sm">
       </div>
     `).join('');
@@ -257,6 +320,25 @@
       });
     });
   }
+
+  window.uploadGalleryImage = async function (event, i) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      showToast('Mengunggah ke GitHub...', 'info');
+      const result = await GitHubUploader.upload(file);
+      currentData.gallery.items[i].image = result.url;
+      const input = document.querySelector(`[data-gallery="${i}"][data-key="image"]`);
+      if (input) input.value = result.url;
+      showToast('✓ Foto berhasil di-upload ke GitHub!', 'success');
+    } catch (err) {
+      console.error('Upload error:', err);
+      showToast('Upload gagal: ' + err.message, 'error');
+    } finally {
+      event.target.value = '';
+    }
+  };
+
   window.removeGallery = function (i) {
     if (!confirm('Hapus foto ini?')) return;
     currentData.gallery.items.splice(i, 1);
@@ -271,7 +353,39 @@
     renderGallery(); updateStats();
   };
 
-  /* ---------- SAVE ALL ---------- */
+  /* GITHUB TOKEN */
+  window.saveGithubToken = function () {
+    const input = document.getElementById('gh-token');
+    const token = input?.value?.trim() || '';
+    if (!token) { showToast('Token kosong', 'error'); return; }
+    GitHubUploader.setToken(token);
+    showToast('✓ Token GitHub disimpan', 'success');
+  };
+  window.testGithubToken = async function () {
+    const status = document.getElementById('gh-status');
+    const input = document.getElementById('gh-token');
+    if (input?.value?.trim()) GitHubUploader.setToken(input.value.trim());
+    if (status) { status.textContent = 'Menguji token...'; status.className = 'text-sm text-gray-500'; }
+    const r = await GitHubUploader.testToken();
+    if (r.ok) {
+      if (status) { status.textContent = '✓ Token valid untuk user: ' + r.user; status.className = 'text-sm text-emerald-600 font-medium'; }
+      showToast('Token valid: ' + r.user, 'success');
+    } else {
+      if (status) { status.textContent = '✗ Token tidak valid: ' + r.error; status.className = 'text-sm text-red-600 font-medium'; }
+      showToast('Token tidak valid: ' + r.error, 'error');
+    }
+  };
+  window.clearGithubToken = function () {
+    if (!confirm('Hapus token GitHub dari browser?')) return;
+    GitHubUploader.setToken('');
+    const input = document.getElementById('gh-token');
+    if (input) input.value = '';
+    const status = document.getElementById('gh-status');
+    if (status) { status.textContent = 'Token dihapus.'; status.className = 'text-sm text-gray-500'; }
+    showToast('Token dihapus', 'success');
+  };
+
+  /* SAVE ALL */
   window.saveAll = function () {
     try {
       collectFields();
@@ -349,7 +463,7 @@
     }
   };
 
-  /* ---------- EXPORT / IMPORT / RESET ---------- */
+  /* EXPORT / IMPORT / RESET */
   window.exportData = function () {
     try {
       collectFields();
@@ -400,11 +514,11 @@
     showToast('✓ Data direset ke default', 'success');
   };
 
-  /* ---------- INIT ---------- */
+  /* INIT */
   function init() {
     currentData = DataStore.get();
     fillForm();
-    console.log('[CMS] Ready. Data:', currentData);
+    console.log('[CMS] Ready.');
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
