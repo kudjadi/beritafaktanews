@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prime Agri Resources</title>
+  <meta name="description" content="PT Prime Agri Resources Tbk. - Agribisnis terintegrasi yang berkelanjutan.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .pillar-card:hover {
+      transform: translateY(-4px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-[#f9f7f3] text-gray-800">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <div id="nav-logo" class="w-8 h-8 rounded-lg bg-emerald-800 flex items-center justify-center text-white font-bold">P</div>
+          <span id="nav-title" class="text-xl font-bold text-emerald-800 tracking-tight">PRIME AGRI</span>
+        </div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium">
+          <a href="#about" class="text-gray-700 hover:text-emerald-700 transition">Tentang Kami</a>
+          <a href="#sustainability" class="text-gray-700 hover:text-emerald-700 transition">Keberlanjutan</a>
+          <a href="#products" class="text-gray-700 hover:text-emerald-700 transition">Produk</a>
+          <a href="#footer" class="text-gray-700 hover:text-emerald-700 transition">Kontak</a>
+        </div>
+        <a href="admin.html" class="hidden md:inline-block bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+          ⚙️ Admin
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="h-[85vh] min-h-[600px] flex items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="max-w-2xl bg-white/85 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-xl border border-white/40">
+        <span id="hero-label" class="text-emerald-700 font-semibold text-sm tracking-wider uppercase"></span>
+        <h1 id="hero-title" class="text-4xl md:text-5xl font-bold text-gray-900 mt-3 leading-tight"></h1>
+        <p id="hero-desc" class="mt-6 text-lg text-gray-700"></p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a id="hero-btn1" href="#" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-3 rounded-full font-semibold shadow transition"></a>
+          <a id="hero-btn2" href="#" class="border border-emerald-800 text-emerald-800 hover:bg-emerald-50 px-6 py-3 rounded-full font-semibold transition"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span id="about-subtitle" class="text-emerald-700 font-semibold text-sm tracking-wider uppercase"></span>
+          <h2 id="about-title" class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6"></h2>
+          <p id="about-para1" class="text-gray-600 leading-relaxed mb-4"></p>
+          <p id="about-para2" class="text-gray-600 leading-relaxed mb-6"></p>
+          <a href="#" class="inline-flex items-center text-emerald-700 font-semibold hover:text-emerald-800 transition">
+            Selengkapnya tentang kami
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <div class="bg-emerald-50 p-8 rounded-2xl border border-emerald-100 shadow-sm">
+          <div class="text-emerald-800 text-2xl font-bold mb-4">“</div>
+          <p id="about-quote" class="text-gray-700 italic text-lg leading-relaxed"></p>
+          <div class="mt-6 flex items-center">
+            <div class="w-12 h-12 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-800 font-bold text-xl">P</div>
+            <div class="ml-3">
+              <p class="font-semibold text-gray-800">Prime Agri Resources</p>
+              <p class="text-sm text-gray-500">Sejak 1989</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUSTAINABILITY -->
+  <section id="sustainability" class="py-16 md:py-24 bg-[#f0ede8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span id="sus-subtitle" class="text-emerald-700 font-semibold text-sm tracking-wider uppercase"></span>
+        <h2 id="sus-title" class="text-3xl md:text-4xl font-bold text-gray-900 mt-2"></h2>
+        <p id="sus-desc" class="mt-4 text-gray-600"></p>
+      </div>
+      <div id="sus-pillars" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- FUNDAMENTALS -->
+  <section id="fundamentals" class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="order-2 md:order-1">
+          <img id="fund-image" src="" alt="Perkebunan" class="rounded-2xl shadow-lg w-full h-auto object-cover aspect-[4/3]">
+        </div>
+        <div class="order-1 md:order-2">
+          <span id="fund-subtitle" class="text-emerald-700 font-semibold text-sm tracking-wider uppercase"></span>
+          <h2 id="fund-title" class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6"></h2>
+          <p id="fund-para1" class="text-gray-600 leading-relaxed mb-4"></p>
+          <p id="fund-para2" class="text-gray-600 leading-relaxed mb-6"></p>
+          <ul id="fund-items" class="space-y-3"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products" class="py-16 md:py-24 bg-emerald-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span id="prod-subtitle" class="text-emerald-300 font-semibold text-sm tracking-wider uppercase"></span>
+        <h2 id="prod-title" class="text-3xl md:text-4xl font-bold mt-2"></h2>
+        <p id="prod-desc" class="mt-4 text-emerald-100"></p>
+      </div>
+      <div id="prod-items" class="grid md:grid-cols-2 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" class="bg-gray-900 text-gray-300 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <span class="text-white text-xl font-bold tracking-tight">PRIME AGRI</span>
+          <p id="foot-desc" class="mt-4 text-sm text-gray-400"></p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Perusahaan</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#about" class="hover:text-emerald-400 transition">Tentang Kami</a></li>
+            <li><a href="#sustainability" class="hover:text-emerald-400 transition">Keberlanjutan</a></li>
+            <li><a href="#products" class="hover:text-emerald-400 transition">Produk</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Kontak</h4>
+          <ul class="space-y-2 text-sm">
+            <li id="foot-address"></li>
+            <li id="foot-email"></li>
+            <li id="foot-phone"></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Admin</h4>
+          <a href="admin.html" class="inline-block bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Buka CMS</a>
+        </div>
+      </div>
+      <div id="foot-copy" class="border-t border-gray-800 mt-10 pt-6 text-center text-xs text-gray-500"></div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>
