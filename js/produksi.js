@@ -1,24 +1,21 @@
 /* =========================================================
-   PRODUKSI PANEN — Data Terpisah
+   PRODUKSI PANEN — Data Terpisah (Versi Ringkas)
    ========================================================= */
 
-const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v1';
+const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v2';
 
+// Data awal dikosongkan/disesuaikan
 const DEFAULT_PRODUKSI = {
   header: {
     kebun: "KPKS JADI MANDIRI",
     noKlp: "37",
     tanggal: "06-07/02/2026",
-    pengurus: "KHOIRUL HUDA & WELLI SANDRA",
-    panenPusingan: "1",
-    totalTanda: "3648",
-    totalBerdondan: "613"
+    pengurus: "KHOIRUL HUDA",
+    panenPusingan: "1"
   },
   rows: [
-    { id: "1", nama: "SURANTO", kavling: "908", absen: "1", berondolan: "", masak: "", mengkal: "", mentah: "", busuk: "", harga: "900", jumlah: "161" },
-    { id: "2", nama: "JUWANDA", kavling: "851", absen: "1", berondolan: "", masak: "", mengkal: "", mentah: "", busuk: "", harga: "900", jumlah: "100" },
-    { id: "3", nama: "KARDI", kavling: "852", absen: "1", berondolan: "", masak: "", mengkal: "", mentah: "", busuk: "", harga: "900", jumlah: "232" },
-    { id: "4", nama: "ASEP PRIHATA", kavling: "853", absen: "1", berondolan: "", masak: "", mengkal: "", mentah: "", busuk: "", harga: "900", jumlah: "72" }
+    // Contoh data dummy agar tabel tidak kosong saat pertama dibuka
+    { id: "1", tanggal: "2026-02-06", pusingan: "1", kelompok: "37", pengurus: "KHOIRUL HUDA", kavling: "37", nama: "SURANTO", absen: "1", berondolan: "0", masak: "0", mengkal: "0", mentah: "0", busuk: "0", harga: "900", jumlah: "161" }
   ]
 };
 
@@ -36,39 +33,49 @@ function saveProduksiData(data) {
   renderProduksi();
 }
 
+// Fungsi untuk mengubah format tanggal HTML (YYYY-MM-DD) ke format tampilan (DD/MM/YYYY)
+function formatTanggal(tgl) {
+  if (!tgl) return "-";
+  const d = new Date(tgl);
+  if (isNaN(d)) return tgl;
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
 function renderProduksi() {
   const data = getProduksiData();
   
-  // Render Header
+  // Render Header Info
   document.getElementById('p-kebun').textContent = data.header.kebun;
   document.getElementById('p-noklp').textContent = data.header.noKlp;
-  document.getElementById('p-tanggal').textContent = data.header.tanggal;
+  document.getElementById('p-tanggal').textContent = formatTanggal(data.header.tanggal);
   document.getElementById('p-pengurus').textContent = data.header.pengurus;
   document.getElementById('p-pusingan').textContent = data.header.panenPusingan;
-  document.getElementById('p-total-tanda').textContent = data.header.totalTanda;
-  document.getElementById('p-total-berdondan').textContent = data.header.totalBerdondan;
 
   // Render Tabel
   const tbody = document.getElementById('p-tbody');
   let totalJumlah = 0;
 
   if (data.rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="11" class="text-center py-4 text-gray-500">Belum ada data.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" class="text-center py-4 text-gray-500">Belum ada data.</td></tr>`;
   } else {
     tbody.innerHTML = data.rows.map((row, index) => {
       totalJumlah += parseFloat(row.jumlah) || 0;
       return `
         <tr class="border-b border-gray-300 hover:bg-gray-50">
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${formatTanggal(row.tanggal)}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.pusingan}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.kelompok}</td>
+          <td class="p-1 border-r border-gray-300 text-xs md:text-sm">${row.pengurus}</td>
+          <td class="p-1 border-r border-gray-300 text-center font-bold text-xs md:text-sm bg-yellow-50">${row.kavling}</td>
           <td class="p-1 border-r border-gray-300 font-medium text-xs md:text-sm">${row.nama}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.kavling}</td>
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.absen}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.berondolan}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.masak}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.mengkal}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.mentah}</td>
-          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.busuk}</td>
-          <td class="p-1 border-r border-gray-300 text-right text-xs md:text-sm">${row.harga}</td>
-          <td class="p-1 border-r border-gray-300 text-right font-bold text-xs md:text-sm">${row.jumlah}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.berondolan || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.masak || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.mengkal || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.mentah || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.busuk || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-right text-xs md:text-sm">${row.harga || 0}</td>
+          <td class="p-1 border-r border-gray-300 text-right font-bold text-xs md:text-sm">${row.jumlah || 0}</td>
           <td class="p-1 text-center">
             <button onclick="hapusBaris(${index})" class="text-red-500 hover:text-red-700 font-bold px-2" title="Hapus">×</button>
           </td>
@@ -77,8 +84,18 @@ function renderProduksi() {
     }).join('');
   }
 
-  // Render Total Footer
   document.getElementById('p-total-jumlah').textContent = totalJumlah;
+}
+
+// Handler saat kelompok dipilih, otomatis isi no kavling
+function updateKavling() {
+  const kelompok = document.getElementById('in-kelompok').value;
+  const kavlingInput = document.getElementById('in-kavling');
+  if (kelompok) {
+    kavlingInput.value = kelompok; // Kavling mengikuti nomor kelompok
+  } else {
+    kavlingInput.value = '';
+  }
 }
 
 // Fungsi Tambah Data dari Form
@@ -86,28 +103,42 @@ function tambahBaris(event) {
   event.preventDefault();
   const data = getProduksiData();
   
+  // Jika input kosong, set default jadi 0
+  const val = (id) => document.getElementById(id).value || "0";
+
   const newRow = {
     id: Date.now().toString(),
-    nama: document.getElementById('in-nama').value,
-    kavling: document.getElementById('in-kavling').value,
-    absen: document.getElementById('in-absen').value,
-    berondolan: document.getElementById('in-berondolan').value,
-    masak: document.getElementById('in-masak').value,
-    mengkal: document.getElementById('in-mengkal').value,
-    mentah: document.getElementById('in-mentah').value,
-    busuk: document.getElementById('in-busuk').value,
-    harga: document.getElementById('in-harga').value,
-    jumlah: document.getElementById('in-jumlah').value
+    tanggal: document.getElementById('in-tanggal').value || "",
+    pusingan: document.getElementById('in-pusingan').value || "1",
+    kelompok: document.getElementById('in-kelompok').value || "",
+    pengurus: document.getElementById('in-pengurus').value || "",
+    kavling: document.getElementById('in-kavling').value || "",
+    nama: document.getElementById('in-nama').value || "-",
+    absen: document.getElementById('in-absen').value || "0",
+    berondolan: val('in-berondolan'),
+    masak: val('in-masak'),
+    mengkal: val('in-mengkal'),
+    mentah: val('in-mentah'),
+    busuk: val('in-busuk'),
+    harga: val('in-harga'),
+    jumlah: val('in-jumlah')
   };
+
+  // Opsional: Update header utama berdasarkan input terakhir
+  if (newRow.tanggal) data.header.tanggal = newRow.tanggal;
+  if (newRow.pusingan) data.header.panenPusingan = newRow.pusingan;
+  if (newRow.kelompok) data.header.noKlp = newRow.kelompok;
+  if (newRow.pengurus) data.header.pengurus = newRow.pengurus;
 
   data.rows.push(newRow);
   saveProduksiData(data);
 
   // Reset form
   document.getElementById('form-produksi').reset();
+  document.getElementById('in-kavling').value = '';
+  document.getElementById('in-pengurus').value = ''; // Kosongkan pengurus agar diisi ulang jika beda
 }
 
-// Fungsi Hapus Data
 function hapusBaris(index) {
   if (!confirm('Hapus data ini?')) return;
   const data = getProduksiData();
@@ -115,31 +146,25 @@ function hapusBaris(index) {
   saveProduksiData(data);
 }
 
-function exportProduksi() {
-  const data = getProduksiData();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'data-produksi-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
+// (Opsional) Generate daftar pengurus per kelompok (Bisa Anda sesuaikan)
+const dataPengurus = {
+  "37": "KHOIRUL HUDA",
+  "38": "WELLI SANDRA",
+  "39": "SUGIANTO",
+  "40": "AHMAD FAUZI",
+  "41": "BAMBANG",
+  // ... tambahkan hingga 48
+};
 
-function importProduksi(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      saveProduksiData(parsed);
-      alert('Data produksi berhasil di-import!');
-    } catch (err) {
-      alert('File JSON tidak valid!');
-    }
-  };
-  reader.readAsText(file);
+function updatePengurus() {
+  const kelompok = document.getElementById('in-kelompok').value;
+  const pengurusInput = document.getElementById('in-pengurus');
+  if (dataPengurus[kelompok]) {
+    pengurusInput.value = dataPengurus[kelompok];
+  } else {
+    pengurusInput.value = ""; // Kosongkan jika kelompok belum diset
+  }
+  updateKavling(); // sekaligus update kavling
 }
 
 document.addEventListener('DOMContentLoaded', renderProduksi);
