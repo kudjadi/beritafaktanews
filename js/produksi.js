@@ -3,7 +3,7 @@ let dataPanen = [];
 let nomorUrut = 1;
 let kelompokTerpilih = null;
 
-// DATA KELOMPOK & KAVLING (Unik per kelompok)
+// DATA KELOMPOK & KAVLING
 const dataKelompok = {
   37: { nama: "KHOIRUL HUDA", kavling: ["SURANTO 908", "WANDA 851", "EGO NOFRI ADI 852", "ASEP PRIHATA 853"] },
   38: { nama: "SLAMET", kavling: ["ARIS FAUJI 875", "KHOIRUDIN 876", "SUKIMIN 877"] },
@@ -22,7 +22,7 @@ const dataKelompok = {
 // KONFIGURASI GITHUB
 let githubConfig = { username: '', repo: 'data-panen-sawit', token: '', branch: 'main' };
 
-// DATA CONTOH (Akan dimuat jika pengguna belum pernah input data)
+// DATA CONTOH (Agar tabel tidak kosong saat pertama dibuka)
 const dataContoh = [
   { no: 1, kelompok_nomor: "37", kelompok_nama: "KHOIRUL HUDA", tanggal: "2026-10-22", nama: "SURANTO", kavling: "SURANTO 908", tandan_mentah: 0, tandan_matang: 15, tandan_busuk: 1, jangkos: 0, berondolan: 5.5 },
   { no: 2, kelompok_nomor: "37", kelompok_nama: "KHOIRUL HUDA", tanggal: "2026-10-22", nama: "WANDA", kavling: "WANDA 851", tandan_mentah: 2, tandan_matang: 20, tandan_busuk: 0, jangkos: 1, berondolan: 10.0 },
@@ -32,32 +32,34 @@ const dataContoh = [
 // --- INISIALISASI ---
 window.onload = function() {
   const today = new Date().toISOString().split('T')[0];
-  document.getElementById('tanggal').value = today;
-  
-  muatData();
-  loadGitHubConfig();
-  
-  // Isi Dropdown Kelompok
+  const tglEl = document.getElementById('tanggal');
+  if (tglEl) tglEl.value = today;
+
+  // 1. Isi Dropdown Kelompok
   const dropdownKelompok = document.getElementById('dropdown_kelompok');
-  for (const key in dataKelompok) {
-    const option = document.createElement('option');
-    option.value = key;
-    option.textContent = `Kel. ${key} - ${dataKelompok[key].nama}`;
-    dropdownKelompok.appendChild(option);
+  if (dropdownKelompok) {
+    for (const key in dataKelompok) {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = `Kel. ${key} - ${dataKelompok[key].nama}`;
+      dropdownKelompok.appendChild(option);
+    }
   }
+
+  // 2. Muat Data Tabel
+  muatData();
 };
 
 // --- FUNGSI DATA LOKAL ---
 function muatData() {
   const saved = localStorage.getItem('dataPanenSawit');
   
-  // Cek apakah ada data tersimpan
-  if (saved && saved !== "[]" && saved !== "") {
-    dataPanen = JSON.parse(saved);
-  } else {
-    // Gunakan data contoh jika belum ada
+  // Jika localStorage kosong atau isinya array kosong "[]", paksa pakai data contoh
+  if (!saved || saved === "[]" || saved === "") {
     dataPanen = [...dataContoh];
-    simpanData(); // Simpan data contoh agar tersimpan sebagai data awal
+    localStorage.setItem('dataPanenSawit', JSON.stringify(dataPanen)); 
+  } else {
+    dataPanen = JSON.parse(saved);
   }
   
   nomorUrut = dataPanen.length > 0 ? dataPanen[dataPanen.length - 1].no + 1 : 1;
@@ -73,13 +75,10 @@ function updateDataKelompok() {
   const selectedValue = document.getElementById('dropdown_kelompok').value;
   const dropdownKavling = document.getElementById('dropdown_kavling');
   
-  // Kosongkan dropdown kavling sebelumnya
   dropdownKavling.innerHTML = '<option value="">-- Pilih Kavling --</option>';
   
   if (selectedValue && dataKelompok[selectedValue]) {
     kelompokTerpilih = selectedValue;
-    
-    // Isi dropdown kavling SESUAI kelompok yang dipilih
     dataKelompok[selectedValue].kavling.forEach(kavling => {
       const option = document.createElement('option');
       option.value = kavling;
@@ -241,44 +240,25 @@ function exportJSON() {
   setTimeout(() => { statusAksi.innerText = ""; }, 3000);
 }
 
-function loadGitHubConfig() {
-  const saved = localStorage.getItem('githubConfig');
-  if (saved) {
-    githubConfig = JSON.parse(saved);
-    if(document.getElementById('githubUsername')) document.getElementById('githubUsername').value = githubConfig.username || '';
-    if(document.getElementById('githubRepo')) document.getElementById('githubRepo').value = githubConfig.repo || 'data-panen-sawit';
-    if(document.getElementById('githubToken')) document.getElementById('githubToken').value = githubConfig.token || '';
-  }
-}
-
-function saveGitHubConfig() {
-  githubConfig = {
-    username: document.getElementById('githubUsername').value.trim(),
-    repo: document.getElementById('githubRepo').value.trim() || 'data-panen-sawit',
-    token: document.getElementById('githubToken').value.trim(),
-    branch: 'main'
-  };
-  localStorage.setItem('githubConfig', JSON.stringify(githubConfig));
-  const status = document.getElementById('githubStatus');
-  status.innerText = '✓ Tersimpan';
-  setTimeout(() => { status.innerText = ''; }, 3000);
-}
-
 async function syncToGitHub() {
-  if (!githubConfig.username || !githubConfig.token) return alert('Isi konfigurasi GitHub!');
+  const user = document.getElementById('githubUsername').value.trim();
+  const repo = document.getElementById('githubRepo').value.trim();
+  const token = document.getElementById('githubToken').value.trim();
+
+  if (!user || !token) return alert('Isi konfigurasi GitHub di bagian Pengaturan!');
   if (dataPanen.length === 0) return alert('Data kosong!');
   
   const status = document.getElementById('githubStatus');
-  status.innerText = '⏳ Uploading...';
+  if(status) status.innerText = '⏳ Uploading...';
   
   try {
     const dataToUpload = { lastUpdated: new Date().toISOString(), totalData: dataPanen.length, dataPanen: dataPanen };
-    const checkUrl = `https://api.github.com/repos/${githubConfig.username}/${githubConfig.repo}/contents/data.json`;
+    const checkUrl = `https://api.github.com/repos/${user}/${repo}/contents/data.json`;
     
     let sha = null;
     try {
       const checkResponse = await fetch(checkUrl, {
-        headers: { 'Authorization': `token ${githubConfig.token}`, 'Accept': 'application/vnd.github.v3+json' }
+        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
       });
       if (checkResponse.ok) {
         const existingFile = await checkResponse.json();
@@ -290,82 +270,29 @@ async function syncToGitHub() {
     const uploadData = {
       message: `Update data panen - ${new Date().toLocaleDateString('id-ID')}`,
       content: content,
-      branch: githubConfig.branch
+      branch: 'main'
     };
     if (sha) uploadData.sha = sha;
 
     const response = await fetch(checkUrl, {
       method: 'PUT',
-      headers: { 'Authorization': `token ${githubConfig.token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
       body: JSON.stringify(uploadData)
     });
 
     if (response.ok) {
-      status.innerText = '✓ Berhasil diupload!';
-      status.className = "text-center text-xs text-green-600 font-medium mt-2";
-      localStorage.setItem('githubDataUrl', `https://raw.githubusercontent.com/${githubConfig.username}/${githubConfig.repo}/main/data.json`);
+      if(status) {
+        status.innerText = '✓ Berhasil diupload!';
+        status.className = "text-center text-xs text-green-600 font-medium mt-2";
+      }
     } else {
       throw new Error('Upload gagal');
     }
   } catch (error) {
-    status.innerText = `❌ Gagal: ${error.message}`;
-    status.className = "text-center text-xs text-red-600 font-medium mt-2";
-  }
-  setTimeout(() => { status.innerText = ''; }, 3000);
-}
-
-async function syncFromGitHub() {
-  const status = document.getElementById('githubStatus');
-  let dataUrl = localStorage.getItem('githubDataUrl');
-  if (!dataUrl && githubConfig.username && githubConfig.repo) {
-    dataUrl = `https://raw.githubusercontent.com/${githubConfig.username}/${githubConfig.repo}/main/data.json`;
-  }
-  if (!dataUrl) return alert('Belum ada URL data GitHub.');
-  
-  status.innerText = '⏳ Downloading...';
-  try {
-    const response = await fetch(dataUrl);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const remoteData = await response.json();
-    const rows = remoteData.dataPanen || remoteData;
-    
-    if (confirm(`Download ${rows.length} data dari GitHub? Data lokal akan diganti.`)) {
-      dataPanen = rows;
-      dataPanen.forEach((data, index) => { data.no = index + 1; });
-      nomorUrut = dataPanen.length + 1;
-      simpanData();
-      updateTabel();
-      status.innerText = '✓ Berhasil didownload!';
-      status.className = "text-center text-xs text-green-600 font-medium mt-2";
+    if(status) {
+      status.innerText = `❌ Gagal: ${error.message}`;
+      status.className = "text-center text-xs text-red-600 font-medium mt-2";
     }
-  } catch (error) {
-    status.innerText = `❌ Gagal: ${error.message}`;
-    status.className = "text-center text-xs text-red-600 font-medium mt-2";
   }
-  setTimeout(() => { status.innerText = ''; }, 3000);
-}
-
-async function createGitHubRepo() {
-  if (!githubConfig.username || !githubConfig.token) return alert('Isi username dan token!');
-  const status = document.getElementById('githubStatus');
-  status.innerText = '⏳ Membuat repo...';
-  
-  try {
-    const response = await fetch('https://api.github.com/user/repos', {
-      method: 'POST',
-      headers: { 'Authorization': `token ${githubConfig.token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
-      body: JSON.stringify({ name: githubConfig.repo, description: 'Database panen sawit', private: false, auto_init: true })
-    });
-    if (response.ok) {
-      status.innerText = '✓ Repo berhasil dibuat!';
-      status.className = "text-center text-xs text-green-600 font-medium mt-2";
-      setTimeout(() => { syncToGitHub(); }, 2000);
-    } else {
-      const err = await response.json();
-      throw new Error(err.message);
-    }
-  } catch (error) {
-    status.innerText = `❌ Gagal: ${error.message}`;
-    status.className = "text-center text-xs text-red-600 font-medium mt-2";
-  }
+  setTimeout(() => { if(status) status.innerText = ''; }, 3000);
 }

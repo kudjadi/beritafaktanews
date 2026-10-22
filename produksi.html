@@ -6,7 +6,6 @@
   <title>Form Panen Sawit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Optimasi Tampilan Mobile */
     @media (max-width: 640px) {
       .mobile-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .mobile-input { font-size: 16px !important; padding: 10px !important; }
@@ -14,25 +13,16 @@
       .mobile-table { font-size: 11px; }
       .mobile-table td, .mobile-table th { padding: 6px 4px !important; }
     }
-    
     button, input, select { min-height: 42px; }
     .scrollable-table { -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-
-    /* Menyembunyikan kolom kurang penting di HP agar tabel compact */
-    @media (max-width: 768px) {
-      .col-hide-md { display: none; }
-    }
-    @media (max-width: 480px) {
-      .col-hide-sm { display: none; }
-    }
+    @media (max-width: 768px) { .col-hide-md { display: none; } }
+    @media (max-width: 480px) { .col-hide-sm { display: none; } }
   </style>
 </head>
 <body class="bg-gray-100 p-3 md:p-6 text-sm text-gray-800">
 
-<!-- Container Utama: Max width agar proporsional di desktop -->
 <div class="max-w-3xl mx-auto space-y-6">
-
-  <!-- CARD FORM INPUT -->
+  <!-- FORM INPUT -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
     <div class="mb-4 border-b pb-2">
       <h1 class="text-xl font-bold text-green-800">Form Input Panen</h1>
@@ -40,7 +30,6 @@
     </div>
 
     <div class="space-y-4">
-      <!-- Baris 1: Kelompok & Tanggal -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Pilih Kelompok</label>
@@ -54,7 +43,6 @@
         </div>
       </div>
       
-      <!-- Baris 2: Pemanen & Kavling -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Nama Pemanen</label>
@@ -68,12 +56,10 @@
         </div>
       </div>
       
-      <!-- Input Manual Kavling -->
       <div>
-        <input id="kavling_manual" placeholder="Atau ketik nomor kavling manual (jika tidak ada di list)..." class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
+        <input id="kavling_manual" placeholder="Atau ketik nomor kavling manual..." class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
       </div>
       
-      <!-- Baris 3: Tandan -->
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-1">Jenis Tandan</label>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -84,21 +70,19 @@
         </div>
       </div>
 
-      <!-- Baris 4: Berondolan -->
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-1">Berondolan (Kg)</label>
         <input id="berondolan" type="number" placeholder="0.0" min="0" step="0.1" class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
       </div>
     </div>
 
-    <!-- Tombol Tambah -->
     <button onclick="tambahData()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow transition mt-5 mobile-btn">
       + Tambah ke Tabel
     </button>
     <p id="statusForm" class="text-center text-xs text-green-600 font-medium mt-2 h-4"></p>
   </div>
 
-  <!-- CARD TABEL DATA -->
+  <!-- TABEL DATA -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="flex justify-between items-center bg-gray-50 p-3 border-b border-gray-200">
       <h2 class="text-sm font-bold text-gray-800">Rekap Data Panen</h2>
@@ -123,12 +107,10 @@
           </tr>
         </thead>
         <tbody id="tabelBody" class="text-xs text-gray-700 divide-y divide-gray-200">
-          <!-- Data dirender oleh JS -->
         </tbody>
       </table>
     </div>
 
-    <!-- Ringkasan Total -->
     <div class="bg-gray-50 p-3 border-t border-gray-200 text-xs">
       <div class="grid grid-cols-4 gap-2 text-center">
         <div><div class="text-gray-500">Matang</div><div id="totalMatangMobile" class="font-bold text-sm text-green-700">0</div></div>
@@ -139,7 +121,7 @@
     </div>
   </div>
 
-  <!-- CARD AKSI & EKSPOR -->
+  <!-- AKSI & GITHUB -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
     <div class="grid grid-cols-3 gap-2 mb-3">
       <button onclick="exportJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded text-xs shadow">📥 JSON</button>
@@ -147,23 +129,7 @@
       <button onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 rounded text-xs shadow">🔄 Reset</button>
     </div>
     <p id="statusAksi" class="text-center text-xs text-blue-600 font-medium h-4"></p>
-
-    <details class="bg-gray-50 border border-gray-200 rounded-lg mt-3">
-      <summary class="p-3 font-bold text-xs text-gray-700 cursor-pointer">⚙️ Pengaturan GitHub</summary>
-      <div class="p-3 border-t border-gray-200 space-y-2">
-        <input id="githubUsername" placeholder="Username GitHub" class="w-full border p-2 rounded text-xs">
-        <input id="githubRepo" placeholder="Nama Repo" value="data-panen-sawit" class="w-full border p-2 rounded text-xs">
-        <input id="githubToken" type="password" placeholder="Token (ghp_...)" class="w-full border p-2 rounded text-xs">
-        <button onclick="saveGitHubConfig()" class="w-full bg-blue-500 text-white p-2 rounded text-xs font-bold">Simpan Konfigurasi</button>
-        <p id="githubStatus" class="text-center text-xs mt-2 h-4"></p>
-        <div class="grid grid-cols-2 gap-2 mt-2">
-          <button onclick="syncFromGitHub()" class="bg-yellow-500 text-white p-2 rounded text-xs font-bold">📥 Download</button>
-          <button onclick="createGitHubRepo()" class="bg-purple-600 text-white p-2 rounded text-xs font-bold">➕ Buat Repo</button>
-        </div>
-      </div>
-    </details>
   </div>
-
 </div>
 
 <script src="produksi.js"></script>
