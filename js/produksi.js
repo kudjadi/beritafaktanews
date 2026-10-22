@@ -1,23 +1,15 @@
 /* =========================================================
-   PRODUKSI PANEN — Data Terpisah (Sinkronisasi Kelompok)
+   PRODUKSI PANEN — Data Terpisah (Fix Dropdown & Header)
    ========================================================= */
 
-const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v4';
+const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v5';
 
 // --- DATABASE KELOMPOK & PENGURUS ---
 const dataKelompok = {
-  "37": "KHOIRUL HUDA",
-  "38": "WELLI SANDRA",
-  "39": "SUGIANTO",
-  "40": "AHMAD FAUZI",
-  "41": "BAMBANG",
-  "42": "JOKO S",
-  "43": "HERI",
-  "44": "WELLI SANDRA",
-  "45": "DEDI",
-  "46": "IWAN",
-  "47": "RUDI",
-  "48": "AGUS"
+  "37": "KHOIRUL HUDA", "38": "WELLI SANDRA", "39": "SUGIANTO", 
+  "40": "AHMAD FAUZI", "41": "BAMBANG", "42": "JOKO S", 
+  "43": "HERI", "44": "WELLI SANDRA", "45": "DEDI", 
+  "46": "IWAN", "47": "RUDI", "48": "AGUS"
 };
 
 // --- DATABASE PEMANEN ---
@@ -62,7 +54,6 @@ function formatTanggal(tgl) {
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 }
 
-// Fungsi untuk menyingkat nama (mengambil kata pertama)
 function singkatNama(nama) {
   return nama.split(' ')[0];
 }
@@ -82,7 +73,7 @@ function renderProduksi() {
   let totalJumlah = 0;
 
   if (data.rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="14" class="text-center py-4 text-gray-500">Belum ada data.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" class="text-center py-4 text-gray-500">Belum ada data.</td></tr>`;
   } else {
     tbody.innerHTML = data.rows.map((row, index) => {
       totalJumlah += parseFloat(row.jumlah) || 0;
@@ -112,33 +103,49 @@ function renderProduksi() {
   document.getElementById('p-total-jumlah').textContent = totalJumlah;
 }
 
-// --- LOGIKA FORM ---
+// --- LOGIKA FORM & INISIALISASI ---
 
+// Pastikan fungsi ini jalan setelah DOM siap
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Isi Dropdown Kelompok & Pengurus
+  const selectKelompok = document.getElementById('in-kelompok');
+  if (selectKelompok) {
+    for(let i=37; i<=48; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${i} - ${dataKelompok[i] || ''}`;
+      selectKelompok.appendChild(opt);
+    }
+  }
+
+  // 2. Isi Dropdown Nama Pemanen
   const selectNama = document.getElementById('in-nama');
   if (selectNama) {
     dataPemanen.forEach((p, i) => {
       const opt = document.createElement('option');
       opt.value = i;
-      // Gabungan Nama dan Kavling di Dropdown
       opt.textContent = `${p.nama} (${p.kavling})`; 
       selectNama.appendChild(opt);
     });
   }
+
+  // 3. Render Tabel
   renderProduksi();
 });
 
-// Saat nama dipilih, isi Kavling dan Harga otomatis
 function pilihPemanen() {
   const index = document.getElementById('in-nama').value;
-  if (index === "") return;
+  const inputHarga = document.getElementById('in-harga');
+  
+  if (index === "") {
+    if(inputHarga) inputHarga.value = "";
+    return;
+  }
   
   const p = dataPemanen[index];
-  document.getElementById('in-kavling').value = p.kavling;
-  document.getElementById('in-harga').value = p.harga;
+  if(inputHarga) inputHarga.value = p.harga;
 }
 
-// Saat Kelompok dipilih, update header No KLP & Pengurus secara live
 function updateKelompok() {
   const kelompok = document.getElementById('in-kelompok').value;
   if (kelompok && dataKelompok[kelompok]) {
@@ -154,15 +161,14 @@ function tambahBaris(event) {
   const val = (id) => document.getElementById(id).value || "0";
   
   const indexPemanen = document.getElementById('in-nama').value;
-  const pemanen = dataPemanen[indexPemanen] || { nama: "-", kavling: "-" };
-
-  // Hitung total buah
-  const totalBuah = 
-    parseFloat(val('in-masak')) + 
-    parseFloat(val('in-mengkal')) + 
-    parseFloat(val('in-mentah')) + 
-    parseFloat(val('in-busuk'));
-    
+  // Validasi jika belum pilih nama
+  if(indexPemanen === "") {
+    alert("Pilih nama pemanen terlebih dahulu!");
+    return;
+  }
+  
+  const pemanen = dataPemanen[indexPemanen];
+  const totalBuah = parseFloat(val('in-masak')) + parseFloat(val('in-mengkal')) + parseFloat(val('in-mentah')) + parseFloat(val('in-busuk'));
   const harga = parseFloat(val('in-harga'));
   const jumlah = totalBuah * harga;
 
@@ -175,7 +181,7 @@ function tambahBaris(event) {
     pusingan: document.getElementById('in-pusingan').value || "1",
     kelompok: kelompok,
     nama: pemanen.nama,
-    kavling: document.getElementById('in-kavling').value || "",
+    kavling: pemanen.kavling, // Otomatis dari data pemanen
     absen: val('in-absen'),
     berondolan: val('in-berondolan'),
     masak: val('in-masak'),
@@ -186,7 +192,6 @@ function tambahBaris(event) {
     jumlah: jumlah.toString()
   };
 
-  // Update header atas berdasarkan input terakhir
   if (newRow.tanggal) data.header.tanggal = newRow.tanggal;
   if (newRow.pusingan) data.header.panenPusingan = newRow.pusingan;
   if (newRow.kelompok) {
@@ -197,10 +202,9 @@ function tambahBaris(event) {
   data.rows.push(newRow);
   saveProduksiData(data);
 
-  // Reset Form
+  // Reset Form (Form Kavling sudah dihapus)
   document.getElementById('in-nama').value = "";
   document.getElementById('in-absen').value = "";
-  document.getElementById('in-kavling').value = "";
   document.getElementById('in-berondolan').value = "";
   document.getElementById('in-masak').value = "";
   document.getElementById('in-mengkal').value = "";

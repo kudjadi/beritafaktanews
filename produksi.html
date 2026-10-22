@@ -55,35 +55,20 @@
           <label class="block text-xs font-semibold text-gray-600 mb-1">Kelompok & Pengurus</label>
           <select id="in-kelompok" onchange="updateKelompok()" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:border-emerald-500 bg-white">
             <option value="">- Pilih -</option>
-            <!-- Diisi via JS -->
-            <script>
-              const dataKelompok = {
-                "37": "KHOIRUL HUDA", "38": "WELLI SANDRA", "39": "SUGIANTO", 
-                "40": "AHMAD FAUZI", "41": "BAMBANG", "42": "JOKO S", 
-                "43": "HERI", "44": "WELLI SANDRA", "45": "DEDI", 
-                "46": "IWAN", "47": "RUDI", "48": "AGUS"
-              };
-              for(let i=37; i<=48; i++) {
-                document.write(`<option value="${i}">${i} - ${dataKelompok[i]}</option>`);
-              }
-            </script>
+            <!-- Diisi oleh Javascript -->
           </select>
         </div>
 
-        <!-- Nama Pemanen digabung dengan Kavling -->
+        <!-- Nama Pemanen (No Kavling input dihapus) -->
         <div class="col-span-1 md:col-span-2">
           <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Pemanen (Kavling)</label>
           <select id="in-nama" onchange="pilihPemanen()" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:border-emerald-500 bg-white">
             <option value="">- Pilih Nama -</option>
-            <!-- Diisi via JS -->
+            <!-- Diisi oleh Javascript -->
           </select>
         </div>
 
-        <div class="col-span-1">
-          <label class="block text-xs font-semibold text-gray-600 mb-1">No Kavling</label>
-          <input type="text" id="in-kavling" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:border-emerald-500 bg-gray-100" readonly placeholder="Otomatis">
-        </div>
-
+        <!-- Harga Otomatis -->
         <div class="col-span-1">
           <label class="block text-xs font-semibold text-gray-600 mb-1">Harga</label>
           <input type="number" id="in-harga" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:border-emerald-500 bg-gray-100" readonly placeholder="Otomatis">
@@ -133,38 +118,38 @@
       <table class="table-excel text-xs md:text-sm">
         <thead>
           <tr>
-            <th colspan="14" class="text-lg md:text-xl py-2 bg-white">REKAPITULASI HASIL</th>
+            <th colspan="13" class="text-lg md:text-xl py-2 bg-white">REKAPITULASI HASIL</th>
           </tr>
         </thead>
         <tbody>
           <!-- INFO HEADER -->
           <tr class="bg-white">
-            <td colspan="6" class="font-bold border-r-0">KEBUN : <span id="p-kebun">-</span></td>
+            <td colspan="5" class="font-bold border-r-0">KEBUN : <span id="p-kebun">-</span></td>
             <td colspan="8" class="font-bold border-l-0">NO KLP : <span id="p-noklp">-</span></td>
           </tr>
           <tr class="bg-white">
-            <td colspan="6" class="border-r-0">TANGGAL: <span id="p-tanggal">-</span></td>
+            <td colspan="5" class="border-r-0">TANGGAL: <span id="p-tanggal">-</span></td>
             <td colspan="8" class="border-l-0">NAMA PENGURUS : <span id="p-pengurus">-</span></td>
           </tr>
           <tr class="bg-white excel-header-outer">
-            <td colspan="14" class="border-b-2">PANEN PUSINGAN : <span id="p-pusingan">-</span></td>
+            <td colspan="13" class="border-b-2">PANEN PUSINGAN : <span id="p-pusingan">-</span></td>
           </tr>
 
-          <!-- HEADER KOLOM -->
+          <!-- HEADER KOLOM DISINGKAT -->
           <tr class="bg-gray-100">
-            <th class="border-b-2">TANGGAL</th>
-            <th class="border-b-2">PUSINGAN</th>
+            <th class="border-b-2">TGL</th>
+            <th class="border-b-2">PSG</th>
             <th class="border-b-2">KLP</th>
-            <th class="border-b-2">NAMA PEMANEN</th>
-            <th class="border-b-2 bg-yellow-50">NO KAVLING</th>
-            <th class="border-b-2">ABSEN</th>
-            <th class="border-b-2">BERONDOLAN</th>
-            <th class="border-b-2">MASAK</th>
-            <th class="border-b-2">MENGKAL</th>
-            <th class="border-b-2">MENTAH</th>
-            <th class="border-b-2">BUSUK</th>
-            <th class="border-b-2">HARGA</th>
-            <th class="border-b-2">JUMLAH</th>
+            <th class="border-b-2">NAMA</th>
+            <th class="border-b-2 bg-yellow-50">KAV</th>
+            <th class="border-b-2">ABS</th>
+            <th class="border-b-2">BRLDN</th>
+            <th class="border-b-2">MSK</th>
+            <th class="border-b-2">MNGKL</th>
+            <th class="border-b-2">MNTH</th>
+            <th class="border-b-2">BSK</th>
+            <th class="border-b-2">RP</th>
+            <th class="border-b-2">JML</th>
             <th class="border-b-2">AKSI</th>
           </tr>
 
@@ -172,7 +157,7 @@
 
           <!-- TOTAL FOOTER -->
           <tr class="bg-gray-100 font-bold">
-            <td colspan="12" class="text-right border-r-0">TOTAL JUMLAH</td>
+            <td colspan="11" class="text-right border-r-0">TOTAL JUMLAH</td>
             <td id="p-total-jumlah" class="text-right border-l-0 text-lg">0</td>
             <td class="border-l-0 bg-gray-100"></td>
           </tr>
