@@ -22,11 +22,11 @@ const dataKelompok = {
 // KONFIGURASI GITHUB
 let githubConfig = { username: '', repo: 'data-panen-sawit', token: '', branch: 'main' };
 
-// DATA CONTOH (Muncul saat pertama kali dibuka)
+// DATA CONTOH (Akan dimuat jika pengguna belum pernah input data)
 const dataContoh = [
   { no: 1, kelompok_nomor: "37", kelompok_nama: "KHOIRUL HUDA", tanggal: "2026-10-22", nama: "SURANTO", kavling: "SURANTO 908", tandan_mentah: 0, tandan_matang: 15, tandan_busuk: 1, jangkos: 0, berondolan: 5.5 },
   { no: 2, kelompok_nomor: "37", kelompok_nama: "KHOIRUL HUDA", tanggal: "2026-10-22", nama: "WANDA", kavling: "WANDA 851", tandan_mentah: 2, tandan_matang: 20, tandan_busuk: 0, jangkos: 1, berondolan: 10.0 },
-  { no: 3, kelompok_nomor: "38", kelompok_nama: "SLAMET", tanggal: "2026-10-22", nama: "ARIS", kavling: "ARIS FAUJI 875", tandan_mentah: 0, tandan_matang: 12, tandan_busuk: 0, jangkos: 0, berondolan: 3.0 }
+  { no: 3, kelompok_nomor: "38", kelompok_nama: "SLAMET", tanggal: "2026-10-22", nama: "ARIS", kavling: "ARIS FAUJI 875", tandan_mentah: 1, tandan_matang: 12, tandan_busuk: 0, jangkos: 0, berondolan: 3.0 }
 ];
 
 // --- INISIALISASI ---
@@ -50,12 +50,16 @@ window.onload = function() {
 // --- FUNGSI DATA LOKAL ---
 function muatData() {
   const saved = localStorage.getItem('dataPanenSawit');
-  if (saved) {
+  
+  // Cek apakah ada data tersimpan
+  if (saved && saved !== "[]" && saved !== "") {
     dataPanen = JSON.parse(saved);
   } else {
     // Gunakan data contoh jika belum ada
     dataPanen = [...dataContoh];
+    simpanData(); // Simpan data contoh agar tersimpan sebagai data awal
   }
+  
   nomorUrut = dataPanen.length > 0 ? dataPanen[dataPanen.length - 1].no + 1 : 1;
   updateTabel();
 }
@@ -153,22 +157,21 @@ function updateTabel() {
     tBusuk += data.tandan_busuk;
     tBrdln += data.berondolan;
     
-    // Tampilan baris tabel yang ringkas
     const row = document.createElement('tr');
-    row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+    row.className = index % 2 === 0 ? 'bg-white hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
     row.innerHTML = `
       <td class="p-2 text-center">${data.no}</td>
       <td class="p-2 col-hide-sm">${data.kelompok_nomor}</td>
       <td class="p-2 col-hide-md">${formatTanggalSingkat(data.tanggal)}</td>
       <td class="p-2 truncate max-w-[60px]" title="${data.nama}">${data.nama.split(' ')[0]}</td>
-      <td class="p-2 bg-green-50 text-center font-medium truncate max-w-[80px]" title="${data.kavling}">${data.kavling}</td>
+      <td class="p-2 bg-green-50 text-center font-medium truncate max-w-[80px]" title="${data.kavling}">${data.kavling.split(' ')[1] || data.kavling}</td>
       <td class="p-2 text-center">${data.tandan_matang}</td>
       <td class="p-2 text-center col-hide-sm">${data.tandan_mentah}</td>
       <td class="p-2 text-center">${data.tandan_busuk}</td>
       <td class="p-2 text-center col-hide-sm">${data.jangkos}</td>
       <td class="p-2 text-center">${data.berondolan}</td>
       <td class="p-2 text-center">
-        <button onclick="hapusData(${index})" class="text-red-500 hover:text-red-700 font-bold">×</button>
+        <button onclick="hapusData(${index})" class="text-red-500 hover:text-red-700 font-bold px-2" title="Hapus">×</button>
       </td>
     `;
     tbody.appendChild(row);
@@ -209,7 +212,6 @@ function resetForm() {
     dataPanen = [];
     nomorUrut = 1;
     document.getElementById('dropdown_kelompok').selectedIndex = 0;
-    document.getElementById('infoKelompok').textContent = "";
     resetInput();
     updateTabel();
     simpanData();
