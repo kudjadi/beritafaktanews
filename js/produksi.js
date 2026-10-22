@@ -1,11 +1,26 @@
 /* =========================================================
-   PRODUKSI PANEN — Data Terpisah (Versi Auto-Calculate)
+   PRODUKSI PANEN — Data Terpisah (Sinkronisasi Kelompok)
    ========================================================= */
 
-const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v3';
+const PRODUKSI_STORAGE_KEY = 'prime_agri_produksi_v4';
+
+// --- DATABASE KELOMPOK & PENGURUS ---
+const dataKelompok = {
+  "37": "KHOIRUL HUDA",
+  "38": "WELLI SANDRA",
+  "39": "SUGIANTO",
+  "40": "AHMAD FAUZI",
+  "41": "BAMBANG",
+  "42": "JOKO S",
+  "43": "HERI",
+  "44": "WELLI SANDRA",
+  "45": "DEDI",
+  "46": "IWAN",
+  "47": "RUDI",
+  "48": "AGUS"
+};
 
 // --- DATABASE PEMANEN ---
-// Anda bisa menambah/mengubah data ini sesuai kebutuhan
 const dataPemanen = [
   { nama: "SURANTO", kavling: "37", harga: "900" },
   { nama: "JUWANDA", kavling: "38", harga: "900" },
@@ -23,9 +38,7 @@ const DEFAULT_PRODUKSI = {
     pengurus: "KHOIRUL HUDA",
     panenPusingan: "1"
   },
-  rows: [
-    { id: "1", tanggal: "2026-02-06", pusingan: "1", kelompok: "37", nama: "SURANTO", kavling: "37", absen: "1", berondolan: "0", masak: "10", mengkal: "0", mentah: "0", busuk: "0", harga: "900", jumlah: "9000" }
-  ]
+  rows: []
 };
 
 function getProduksiData() {
@@ -47,6 +60,11 @@ function formatTanggal(tgl) {
   const d = new Date(tgl);
   if (isNaN(d)) return tgl;
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
+// Fungsi untuk menyingkat nama (mengambil kata pertama)
+function singkatNama(nama) {
+  return nama.split(' ')[0];
 }
 
 function renderProduksi() {
@@ -73,7 +91,7 @@ function renderProduksi() {
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${formatTanggal(row.tanggal)}</td>
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.pusingan}</td>
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.kelompok}</td>
-          <td class="p-1 border-r border-gray-300 font-medium text-xs md:text-sm">${row.nama}</td>
+          <td class="p-1 border-r border-gray-300 font-medium text-xs md:text-sm">${singkatNama(row.nama)}</td>
           <td class="p-1 border-r border-gray-300 text-center font-bold text-xs md:text-sm bg-yellow-50">${row.kavling}</td>
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.absen}</td>
           <td class="p-1 border-r border-gray-300 text-center text-xs md:text-sm">${row.berondolan || 0}</td>
@@ -96,14 +114,14 @@ function renderProduksi() {
 
 // --- LOGIKA FORM ---
 
-// Isi dropdown nama saat halaman dimuat
 document.addEventListener('DOMContentLoaded', () => {
   const selectNama = document.getElementById('in-nama');
   if (selectNama) {
     dataPemanen.forEach((p, i) => {
       const opt = document.createElement('option');
-      opt.value = i; // Gunakan index sebagai value
-      opt.textContent = p.nama;
+      opt.value = i;
+      // Gabungan Nama dan Kavling di Dropdown
+      opt.textContent = `${p.nama} (${p.kavling})`; 
       selectNama.appendChild(opt);
     });
   }
@@ -120,9 +138,13 @@ function pilihPemanen() {
   document.getElementById('in-harga').value = p.harga;
 }
 
-function updateKavling() {
+// Saat Kelompok dipilih, update header No KLP & Pengurus secara live
+function updateKelompok() {
   const kelompok = document.getElementById('in-kelompok').value;
-  if (kelompok) document.getElementById('in-kavling').value = kelompok;
+  if (kelompok && dataKelompok[kelompok]) {
+    document.getElementById('p-noklp').textContent = kelompok;
+    document.getElementById('p-pengurus').textContent = dataKelompok[kelompok];
+  }
 }
 
 function tambahBaris(event) {
@@ -142,15 +164,16 @@ function tambahBaris(event) {
     parseFloat(val('in-busuk'));
     
   const harga = parseFloat(val('in-harga'));
-  
-  // Kalkulasi Jumlah Otomatis (Total Buah x Harga)
   const jumlah = totalBuah * harga;
+
+  const kelompok = document.getElementById('in-kelompok').value || "";
+  const pengurus = dataKelompok[kelompok] || "-";
 
   const newRow = {
     id: Date.now().toString(),
     tanggal: document.getElementById('in-tanggal').value || "",
     pusingan: document.getElementById('in-pusingan').value || "1",
-    kelompok: document.getElementById('in-kelompok').value || "",
+    kelompok: kelompok,
     nama: pemanen.nama,
     kavling: document.getElementById('in-kavling').value || "",
     absen: val('in-absen'),
@@ -163,15 +186,18 @@ function tambahBaris(event) {
     jumlah: jumlah.toString()
   };
 
-  // Update header atas
+  // Update header atas berdasarkan input terakhir
   if (newRow.tanggal) data.header.tanggal = newRow.tanggal;
   if (newRow.pusingan) data.header.panenPusingan = newRow.pusingan;
-  if (newRow.kelompok) data.header.noKlp = newRow.kelompok;
+  if (newRow.kelompok) {
+    data.header.noKlp = newRow.kelompok;
+    data.header.pengurus = pengurus;
+  }
 
   data.rows.push(newRow);
   saveProduksiData(data);
 
-  // Reset Form (kecuali tanggal, pusingan, kelompok agar tidak perlu input ulang)
+  // Reset Form
   document.getElementById('in-nama').value = "";
   document.getElementById('in-absen').value = "";
   document.getElementById('in-kavling').value = "";
