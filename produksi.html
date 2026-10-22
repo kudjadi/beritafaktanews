@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rekapitulasi Hasil Panen — Prime Agri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .table-excel {
+      border-collapse: collapse;
+      width: 100%;
+      border: 2px solid #000;
+    }
+    .table-excel th, .table-excel td {
+      border: 1px solid #000;
+      padding: 4px 8px;
+    }
+    .table-excel th {
+      background-color: #f3f4f6;
+      font-weight: bold;
+      text-align: center;
+    }
+    .excel-header-outer {
+      border-bottom: 3px double #000;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900 p-4 md:p-8">
+
+  <div class="max-w-6xl mx-auto bg-white p-4 md:p-8 shadow-lg rounded-lg">
+    
+    <!-- Top Actions -->
+    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+      <a href="index.html" class="text-emerald-700 hover:text-emerald-900 font-semibold flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Kembali ke Beranda
+      </a>
+      <div class="flex gap-2">
+        <button onclick="exportProduksi()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-sm px-4 py-2 rounded shadow transition">⬇ Export JSON</button>
+        <label class="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm px-4 py-2 rounded shadow transition">
+          ⬆ Import JSON
+          <input type="file" id="import-file" accept=".json" class="hidden" onchange="importProduksi(event)">
+        </label>
+      </div>
+    </div>
+
+    <!-- FORM INPUT DATA BARU -->
+    <div class="mb-8 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+      <h2 class="font-bold text-gray-800 mb-3 text-lg">Tambah Data Panen</h2>
+      <form id="form-produksi" onsubmit="tambahBaris(event)" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        
+        <div class="col-span-2 md:col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Nama</label>
+          <input type="text" id="in-nama" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+        
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">No Kavling</label>
+          <input type="text" id="in-kavling" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+        
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Absen</label>
+          <input type="number" id="in-absen" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Berondolan</label>
+          <input type="number" id="in-berondolan" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Masak</label>
+          <input type="number" id="in-masak" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Mengkal</label>
+          <input type="number" id="in-mengkal" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Mentah</label>
+          <input type="number" id="in-mentah" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Busuk</label>
+          <input type="number" id="in-busuk" class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Harga (Rp)</label>
+          <input type="number" id="in-harga" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah</label>
+          <input type="number" id="in-jumlah" required class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="col-span-2 md:col-span-5 flex justify-end mt-2">
+          <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm px-6 py-2 rounded shadow transition">
+            + Tambah ke Tabel
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Tabel Rekapitulasi -->
+    <div class="overflow-x-auto">
+      <table class="table-excel text-sm md:text-base">
+        <thead>
+          <tr>
+            <th colspan="11" class="text-lg md:text-xl py-2 bg-white">REKAPITULASI HASIL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bg-white">
+            <td colspan="4" class="font-bold border-r-0">KEBUN : <span id="p-kebun">-</span></td>
+            <td colspan="7" class="font-bold border-l-0">NO KLP : <span id="p-noklp">-</span></td>
+          </tr>
+          <tr class="bg-white">
+            <td colspan="4" class="border-r-0">TANGGAL: <span id="p-tanggal">-</span></td>
+            <td colspan="7" class="border-l-0">NAMA PENGURUS : <span id="p-pengurus">-</span></td>
+          </tr>
+          <tr class="bg-white excel-header-outer">
+            <td colspan="4" class="border-r-0">PANEN PUSINGAN : <span id="p-pusingan">-</span></td>
+            <td colspan="7" class="border-l-0">
+              <span class="font-bold">TOTAL TANDA</span> 
+              <span id="p-total-tanda" class="ml-4 mr-8 font-normal">-</span>
+              <span class="font-bold">BERONDOLAN</span> 
+              <span id="p-total-berdondan" class="ml-4 font-normal">-</span>
+            </td>
+          </tr>
+
+          <tr class="bg-gray-100">
+            <th rowspan="2" class="border-b-2">NAMA</th>
+            <th rowspan="2" class="border-b-2">NO KAVLING</th>
+            <th rowspan="2" class="border-b-2">ABSEN</th>
+            <th rowspan="2" class="border-b-2">BERONDOLAN</th>
+            <th colspan="4" class="border-b">BUAH</th>
+            <th rowspan="2" class="border-b-2">HARGA</th>
+            <th rowspan="2" class="border-b-2">JUMLAH</th>
+            <th rowspan="2" class="border-b-2">AKSI</th>
+          </tr>
+          <tr class="bg-gray-100">
+            <th class="border-b-2">MASAK</th>
+            <th class="border-b-2">MENGKAL</th>
+            <th class="border-b-2">MENTAH</th>
+            <th class="border-b-2">BUSUK</th>
+          </tr>
+
+          <tbody id="p-tbody"></tbody>
+
+          <tr class="bg-gray-100 font-bold">
+            <td colspan="9" class="text-right border-r-0">TOTAL JUMLAH</td>
+            <td id="p-total-jumlah" class="text-right border-l-0 text-lg">0</td>
+            <td class="border-l-0 bg-gray-100"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script src="js/produksi.js"></script>
+</body>
+</html>
