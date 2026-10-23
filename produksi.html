@@ -21,7 +21,7 @@
 </head>
 <body class="bg-gray-100 p-3 md:p-6 text-sm text-gray-800">
 
-<div class="max-w-5xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-6">
   <!-- CARD FORM INPUT -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
     <div class="mb-4 border-b pb-2">
@@ -52,20 +52,14 @@
         </div>
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">No Kavling</label>
-          <select id="dropdown_kavling" class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input" onchange="updateHarga()">
+          <select id="dropdown_kavling" class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
             <option value="">-- Pilih Kavling --</option>
           </select>
         </div>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <input id="kavling_manual" placeholder="Atau ketik nomor kavling manual..." class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Harga (Otomatis)</label>
-          <input id="harga" type="number" readonly placeholder="0" class="w-full border border-gray-300 rounded-lg bg-gray-100 focus:ring-1 focus:ring-green-500 mobile-input">
-        </div>
+      <div>
+        <input id="kavling_manual" placeholder="Atau ketik nomor kavling manual..." class="w-full border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 mobile-input">
       </div>
       
       <!-- Baris 3: Tandan -->
@@ -86,32 +80,27 @@
       </div>
     </div>
 
+    <!-- Tombol Tambah & Push Otomatis -->
     <button onclick="tambahData()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow transition mt-5 mobile-btn">
-      + Tambah ke Tabel
+      + Tambah ke Tabel (Auto-Save)
     </button>
     <p id="statusForm" class="text-center text-xs text-green-600 font-medium mt-2 h-4"></p>
   </div>
 
   <!-- CARD TABEL DATA -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    
-    <!-- Header Tabel dengan Filter & Tombol Push -->
-    <div class="bg-gray-50 p-3 border-b border-gray-200 flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center gap-2">
+    <div class="bg-gray-50 p-3 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-2">
+      <div class="flex items-center gap-3">
         <h2 class="text-sm font-bold text-gray-800">Rekap Data Panen</h2>
         <span id="totalData" class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">0 data</span>
       </div>
-      
+      <!-- FILTER KELOMPOK -->
       <div class="flex items-center gap-2">
-        <!-- Filter Kelompok -->
-        <select id="filter_kelompok" onchange="filterTabel()" class="border border-gray-300 rounded text-xs p-1.5 focus:ring-1 focus:ring-green-500">
-          <option value="">Semua Kelompok</option>
-          <!-- Opsi diisi JS -->
+        <label class="text-xs text-gray-600">Filter Kelompok:</label>
+        <select id="filter_kelompok" onchange="updateTabel()" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white">
+          <option value="all">Semua Kelompok</option>
+          <!-- Diisi otomatis oleh JS -->
         </select>
-        <!-- Tombol Push Cepat -->
-        <button onclick="syncToGitHub()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-1.5 px-3 rounded text-xs shadow flex items-center gap-1">
-          📤 Push
-        </button>
       </div>
     </div>
     
@@ -119,20 +108,18 @@
       <table id="tabelData" class="w-full text-left border-collapse mobile-table">
         <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
           <tr>
-            <th class="p-2 border-b">No</th>
-            <th class="p-2 border-b col-hide-sm">Kelompok</th>
-            <th class="p-2 border-b col-hide-md">Tgl</th>
-            <th class="p-2 border-b">Nama</th>
-            <th class="p-2 border-b bg-green-50">Kavling</th>
-            <th class="p-2 border-b text-center">Mtg</th>
-            <th class="p-2 border-b text-center col-hide-sm">Mnt</th>
-            <th class="p-2 border-b text-center">Bsk</th>
-            <th class="p-2 border-b text-center col-hide-sm">Jkg</th>
-            <th class="p-2 border-b text-center">Brdln</th>
-            <th class="p-2 border-b text-center">Jml</th>
-            <th class="p-2 border-b text-right">Harga</th>
-            <th class="p-2 border-b text-right bg-yellow-50">Total Rp</th>
-            <th class="p-2 border-b text-center">X</th>
+            <th class="p-2 border-b border-gray-300">No</th>
+            <th class="p-2 border-b border-gray-300 col-hide-sm">Kelompok</th>
+            <th class="p-2 border-b border-gray-300 col-hide-md">Tgl</th>
+            <th class="p-2 border-b border-gray-300">Nama</th>
+            <th class="p-2 border-b border-gray-300 bg-green-50">Kavling</th>
+            <th class="p-2 border-b border-gray-300 text-center">Mtg</th>
+            <th class="p-2 border-b border-gray-300 text-center col-hide-sm">Mnt</th>
+            <th class="p-2 border-b border-gray-300 text-center">Bsk</th>
+            <th class="p-2 border-b border-gray-300 text-center col-hide-sm">Jkg</th>
+            <th class="p-2 border-b border-gray-300 text-center">Brdln</th>
+            <th class="p-2 border-b border-gray-300 text-center bg-yellow-50 font-bold">Jumlah</th>
+            <th class="p-2 border-b border-gray-300 text-center">X</th>
           </tr>
         </thead>
         <tbody id="tabelBody" class="text-xs text-gray-700 divide-y divide-gray-200">
@@ -147,27 +134,28 @@
         <div><div class="text-gray-500">Matang</div><div id="totalMatangMobile" class="font-bold text-sm text-green-700">0</div></div>
         <div><div class="text-gray-500">Mentah</div><div id="totalMentahMobile" class="font-bold text-sm text-green-700">0</div></div>
         <div><div class="text-gray-500">Busuk</div><div id="totalBusukMobile" class="font-bold text-sm text-green-700">0</div></div>
-        <div><div class="text-gray-500">Total Rp</div><div id="totalRpMobile" class="font-bold text-sm text-yellow-600">Rp 0</div></div>
+        <div><div class="text-gray-500">Berondolan</div><div id="totalBrdlnMobile" class="font-bold text-sm text-green-700">0</div></div>
       </div>
     </div>
   </div>
 
-  <!-- CARD AKSI & EKSPOR -->
+  <!-- CARD AKSI & EKSPOR (Tombol Push manual dihilangkan karena sudah otomatis) -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-    <div class="grid grid-cols-3 gap-2 mb-3">
-      <button onclick="exportJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded text-xs shadow">📥 JSON</button>
-      <button onclick="syncToGitHub()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded text-xs shadow">📤 GitHub</button>
-      <button onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 rounded text-xs shadow">🔄 Reset</button>
+    <div class="grid grid-cols-2 gap-2 mb-3">
+      <button onclick="exportJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded text-xs shadow">📥 Download JSON</button>
+      <button onclick="resetForm()" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded text-xs shadow">🔄 Reset Semua Data</button>
     </div>
     <p id="statusAksi" class="text-center text-xs text-blue-600 font-medium h-4"></p>
 
+    <!-- Pengaturan GitHub -->
     <details class="bg-gray-50 border border-gray-200 rounded-lg mt-3">
-      <summary class="p-3 font-bold text-xs text-gray-700 cursor-pointer">⚙️ Pengaturan GitHub</summary>
+      <summary class="p-3 font-bold text-xs text-gray-700 cursor-pointer">⚙️ Pengaturan GitHub (Wajib untuk Auto-Push)</summary>
       <div class="p-3 border-t border-gray-200 space-y-2">
+        <p class="text-xs text-gray-500 mb-2">Isi data ini sekali saja. Setiap kali Anda menambah data panen, sistem akan otomatis mengunggahnya ke GitHub.</p>
         <input id="githubUsername" placeholder="Username GitHub" class="w-full border p-2 rounded text-xs">
         <input id="githubRepo" placeholder="Nama Repo" value="data-panen-sawit" class="w-full border p-2 rounded text-xs">
         <input id="githubToken" type="password" placeholder="Token (ghp_...)" class="w-full border p-2 rounded text-xs">
-        <button onclick="saveGitHubConfig()" class="w-full bg-blue-500 text-white p-2 rounded text-xs font-bold">Simpan Konfigurasi</button>
+        <button onclick="saveGitHubConfig()" class="w-full bg-gray-800 text-white p-2 rounded text-xs font-bold">Simpan Konfigurasi</button>
         <p id="githubStatus" class="text-center text-xs mt-2 h-4"></p>
       </div>
     </details>
